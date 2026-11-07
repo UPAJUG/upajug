@@ -30,7 +30,7 @@
     }
     .brand-title { font-size: 1.4rem; font-weight: 800; background: linear-gradient(135deg, #ffffff, var(--accent-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    .container { max-width: 750px; margin: 2rem auto; padding: 0 1rem; display: flex; flex-direction: column; gap: 2rem; }
+    .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; display: flex; flex-direction: column; gap: 2rem; }
 
     .admin-card {
       background: rgba(19, 31, 56, 0.65); backdrop-filter: blur(16px);
@@ -46,10 +46,17 @@
 
     .btn-submit { width: 100%; padding: 0.85rem; border-radius: 12px; border: none; background: var(--gradient-orange); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 1rem; }
     
-    .list-item { display: flex; justify-content: space-between; align-items: center; background: rgba(8, 13, 25, 0.6); padding: 0.9rem; border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(255, 255, 255, 0.08); }
-    .btn-action { padding: 6px 12px; border-radius: 8px; border: none; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+    .list-item { background: rgba(8, 13, 25, 0.6); padding: 1rem; border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.08); }
+    .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 6px; }
+    .order-body p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 3px; }
+    .order-items { background: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: 8px; margin: 6px 0; font-size: 0.82rem; color: #fff; }
+
+    .btn-action { padding: 5px 10px; border-radius: 6px; border: none; font-size: 0.78rem; font-weight: 600; cursor: pointer; }
     .btn-edit { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
-    .btn-del { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); margin-left: 5px; }
+    .btn-del { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .status-badge { padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; }
+    .status-pending { background: rgba(255, 183, 3, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+    .status-completed { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
 
     .lock-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 19, 37, 0.95); backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 1rem; }
     .lock-box { background: #111a2e; padding: 2rem; border-radius: 20px; border: 1px solid rgba(255, 107, 0, 0.3); text-align: center; max-width: 380px; width: 100%; }
@@ -73,7 +80,16 @@
   <header><div class="brand-title">উপযোগ - অ্যাডমিন প্যানেল</div></header>
 
   <div class="container">
-    <!-- ১. প্রডাক্ট এন্ট্রি/এডিট -->
+    
+    <!-- ১. কাস্টমার অর্ডার ম্যানেজমেন্ট সেকশন -->
+    <div class="admin-card">
+      <div class="card-title"><i class="fa-solid fa-clipboard-list"></i> কাস্টমার অর্ডার লিস্ট (Order Tracking)</div>
+      <div id="adminOrderList">
+        <p style="font-size: 0.88rem; color: var(--text-muted);">অর্ডার লোড হচ্ছে...</p>
+      </div>
+    </div>
+
+    <!-- ২. প্রডাক্ট এন্ট্রি/এডিট -->
     <div class="admin-card">
       <div class="card-title" id="formTitleText"><i class="fa-solid fa-plus-circle"></i> নতুন প্রোডাক্ট যুক্ত করুন</div>
       <div id="statusMsg" class="status-msg"></div>
@@ -121,34 +137,33 @@
       </form>
     </div>
 
-    <!-- ২. কুপন কোড সেটআপ -->
+    <!-- ৩. কুপন কোড সেটআপ -->
     <div class="admin-card">
-      <div class="card-title"><i class="fa-solid fa-ticket"></i> নতুন ডিসকাউন্ট কুপন তৈরি করুন</div>
+      <div class="card-title"><i class="fa-solid fa-ticket"></i> ডিসকাউন্ট কুপন ম্যানেজমেন্ট</div>
       <form id="couponForm">
         <div class="form-group">
-          <label>কুপন কোড (যেমন: EID20) *</label>
-          <input type="text" id="cpCode" class="form-control" placeholder="EID20" style="text-transform: uppercase;" required>
+          <label>কুপন কোড *</label>
+          <input type="text" id="cpCode" class="form-control" placeholder="যেমন: EID20" style="text-transform: uppercase;" required>
         </div>
         <div class="form-group">
           <label>ডিসকাউন্ট পার্সেন্ট (%) *</label>
-          <input type="number" id="cpPercent" class="form-control" placeholder="যেমন: 20 (মানে ২০% ছাড়)" required>
+          <input type="number" id="cpPercent" class="form-control" placeholder="যেমন: 20" required>
         </div>
         <div class="form-group">
-          <label>প্রযোজ্য প্রডাক্ট (ঐচ্ছিক)</label>
+          <label>প্রযোজ্য প্রডাক্ট</label>
           <select id="cpProductId" class="form-control">
             <option value="ALL">সকল প্রডাক্টের জন্য প্রযোজ্য</option>
           </select>
         </div>
-        <button type="submit" id="cpSubmitBtn" class="btn-submit" style="background: linear-gradient(135deg, #10b981, #059669);">
+        <button type="submit" class="btn-submit" style="background: linear-gradient(135deg, #10b981, #059669);">
           <i class="fa-solid fa-plus"></i> কুপন যুক্ত করুন
         </button>
       </form>
-
       <h4 style="margin-top: 1.5rem; margin-bottom: 0.8rem; font-size: 0.95rem; color: var(--accent-gold);">বিদ্যমান কুপনসমূহ:</h4>
       <div id="couponListContainer"><p style="font-size:0.85rem; color:var(--text-muted);">কুপন লোড হচ্ছে...</p></div>
     </div>
 
-    <!-- ৩. বিদ্যমান প্রডাক্ট ম্যানেজমেন্ট -->
+    <!-- ৪. বিদ্যমান প্রডাক্ট ম্যানেজমেন্ট -->
     <div class="admin-card">
       <div class="card-title"><i class="fa-solid fa-boxes-stacked"></i> সমস্ত প্রোডাক্ট লিস্ট</div>
       <div id="adminProductList"><p style="font-size: 0.88rem; color: var(--text-muted);">লোড হচ্ছে...</p></div>
@@ -176,12 +191,86 @@
         document.getElementById('lockOverlay').style.display = 'none';
         loadAdminProducts();
         loadAdminCoupons();
+        loadAdminOrders();
       } else {
         document.getElementById('pinError').style.display = 'block';
       }
     };
 
     let allProducts = [];
+
+    // অর্ডার লিস্ট লোড করার ফাংশন
+    async function loadAdminOrders() {
+      const container = document.getElementById('adminOrderList');
+      try {
+        const querySnapshot = await getDocs(collection(db, "orders"));
+        if(querySnapshot.empty) {
+          container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted);">এই মুহূর্তে কোনো নতুন অর্ডার নেই।</p>`;
+          return;
+        }
+
+        let html = '';
+        querySnapshot.forEach((docSnap) => {
+          const o = docSnap.data();
+          const orderId = docSnap.id;
+          const statusClass = o.status === 'Completed' ? 'status-completed' : 'status-pending';
+          const statusText = o.status === 'Completed' ? 'Completed (সম্পন্ন)' : 'Pending (পেন্ডিং)';
+
+          let itemsHtml = '';
+          if(o.items && Array.isArray(o.items)) {
+            o.items.forEach(item => {
+              itemsHtml += `• ${item.title} (${item.qty} pcs) - ৳${item.price * item.qty}<br>`;
+            });
+          }
+
+          html += `
+            <div class="list-item">
+              <div class="order-header">
+                <strong style="color:var(--accent-gold); font-size:0.95rem;">👤 ${o.customerName}</strong>
+                <span class="status-badge ${statusClass}" onclick="toggleOrderStatus('${orderId}', '${o.status || 'Pending'}')" style="cursor:pointer;" title="স্ট্যাটাস বদলাতে ক্লিক করুন">${statusText}</span>
+              </div>
+              <div class="order-body">
+                <p><strong>📞 ফোন:</strong> ${o.customerPhone}</p>
+                <p><strong>📍 ঠিকানা:</strong> ${o.customerAddress}</p>
+                <div class="order-items"><strong>📦 প্রডাক্টসমূহ:</strong><br>${itemsHtml}</div>
+                <p><strong>💰 মোট মূল্য:</strong> ৳${o.totalAmount} | <strong>অগ্রিম (${o.paymentMethod}):</strong> ৳${o.advancePaid}</p>
+                <p><strong>💳 পেমেন্ট সেন্ডার:</strong> ${o.paymentSender} (TrxID: ${o.transactionId})</p>
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">🕒 সময়: ${new Date(o.orderDate).toLocaleString('bn-BD')}</p>
+              </div>
+              <div style="margin-top: 8px; text-align: right;">
+                <button class="btn-action btn-del" onclick="deleteOrder('${orderId}')"><i class="fa-solid fa-trash"></i> অর্ডার মুছুন</button>
+              </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = `<p style="color:var(--accent-red); font-size:0.85rem;">অর্ডার লোড করতে সমস্যা হয়েছে।</p>`;
+      }
+    }
+
+    // অর্ডারের স্ট্যাটাস টগল বা পরিবর্তন করার ফাংশন
+    window.toggleOrderStatus = async function(orderId, currentStatus) {
+      const newStatus = currentStatus === 'Pending' ? 'Completed' : 'Pending';
+      try {
+        await updateDoc(doc(db, "orders", orderId), { status: newStatus });
+        loadAdminOrders();
+      } catch (e) {
+        alert("স্ট্যাটাস আপডেট করা যায়নি!");
+      }
+    };
+
+    // অর্ডার ডিলিট করার ফাংশন
+    window.deleteOrder = async function(orderId) {
+      if(confirm("আপনি কি নিশ্চিতভাবে এই অর্ডারটি ডিলিট করতে চান?")) {
+        try {
+          await deleteDoc(doc(db, "orders", orderId));
+          loadAdminOrders();
+        } catch (e) {
+          alert("অর্ডার ডিলিট করা যায়নি!");
+        }
+      }
+    };
 
     async function loadAdminProducts() {
       const listContainer = document.getElementById('adminProductList');
@@ -207,10 +296,10 @@
         let html = '';
         allProducts.forEach(p => {
           html += `
-            <div class="list-item">
+            <div class="list-item" style="display:flex; justify-content:space-between; align-items:center;">
               <div>
                 <h4 style="color:#fff;">${p.title}</h4>
-                <p style="font-size:0.8rem; color:var(--accent-gold);">৳${p.price} | ID: ${p.id}</p>
+                <p style="font-size:0.8rem; color:var(--accent-gold);">৳${p.price}</p>
               </div>
               <div>
                 <button class="btn-action btn-edit" onclick="prepareEdit('${p.id}')">এডিট</button>
@@ -219,9 +308,7 @@
             </div>`;
         });
         listContainer.innerHTML = html;
-      } catch (e) {
-        listContainer.innerHTML = `<p style="color:var(--accent-red);">এরর হয়েছে!</p>`;
-      }
+      } catch (e) {}
     }
 
     async function loadAdminCoupons() {
@@ -229,26 +316,22 @@
       try {
         const querySnapshot = await getDocs(collection(db, "coupons"));
         if(querySnapshot.empty) {
-          container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted);">কোনো কুপন তৈরি করা হয়নি।</p>`;
+          container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted);">কোনো কুপন নেই।</p>`;
           return;
         }
         let html = '';
         querySnapshot.forEach((docSnap) => {
           const c = docSnap.data();
-          const targetName = c.productId === 'ALL' ? 'সকল প্রডাক্ট' : (allProducts.find(x => x.id === c.productId)?.title || c.productId);
           html += `
-            <div class="list-item">
+            <div class="list-item" style="display:flex; justify-content:space-between; align-items:center;">
               <div>
-                <strong style="color:var(--accent-gold); font-size:1rem;">${c.code}</strong> (${c.percent}% ছাড়)
-                <p style="font-size:0.78rem; color:var(--text-muted);">প্রযোজ্য: ${targetName}</p>
+                <strong style="color:var(--accent-gold);">${c.code}</strong> (${c.percent}% ছাড়)
               </div>
               <button class="btn-action btn-del" onclick="deleteCoupon('${docSnap.id}')">মুছুন</button>
             </div>`;
         });
         container.innerHTML = html;
-      } catch (e) {
-        container.innerHTML = `<p style="color:var(--accent-red); font-size:0.8rem;">কুপন লোড ফেইল্ড!</p>`;
-      }
+      } catch (e) {}
     }
 
     document.getElementById('couponForm').addEventListener('submit', async (e) => {
@@ -256,19 +339,16 @@
       const code = document.getElementById('cpCode').value.trim().toUpperCase();
       const percent = Number(document.getElementById('cpPercent').value);
       const productId = document.getElementById('cpProductId').value;
-
       try {
         await addDoc(collection(db, "coupons"), { code, percent, productId });
-        alert("🎉 নতুন কুপন সফলভাবে যুক্ত হয়েছে!");
+        alert("🎉 কুপন যুক্ত হয়েছে!");
         document.getElementById('couponForm').reset();
         loadAdminCoupons();
-      } catch (err) {
-        alert("❌ কুপন যুক্ত করা যায়নি!");
-      }
+      } catch (err) {}
     });
 
     window.deleteCoupon = async function(id) {
-      if(confirm("কুপনটি ডিলিট করবেন?")) {
+      if(confirm("কুপন মুছবেন?")) {
         await deleteDoc(doc(db, "coupons", id));
         loadAdminCoupons();
       }
@@ -298,7 +378,7 @@
     };
 
     window.deleteProduct = async function(id) {
-      if(confirm("প্রোডাক্টটি ডিলিট করতে চান?")) {
+      if(confirm("প্রোডাক্ট ডিলিট করবেন?")) {
         await deleteDoc(doc(db, "products", id));
         loadAdminProducts();
       }
