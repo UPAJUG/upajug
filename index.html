@@ -171,13 +171,12 @@
     .modal-content { background: #111a2e; border-radius: 20px; padding: 1.4rem; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; border: 1px solid rgba(255, 107, 0, 0.3); position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
     .close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); }
 
-    /* Forms */
+    /* Forms & Coupon */
     .form-group { margin-bottom: 0.8rem; }
     .form-group label { display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
     .form-control { width: 100%; padding: 0.65rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: #080d19; color: #fff; outline: none; }
     .form-control:focus { border-color: var(--accent-orange); }
 
-    /* কুপন বক্স স্টাইল */
     .coupon-card { background: rgba(255, 183, 3, 0.08); border: 1px dashed var(--accent-gold); padding: 10px 12px; border-radius: 12px; margin-bottom: 0.9rem; }
     .coupon-box { display: flex; gap: 8px; margin-top: 6px; }
     .btn-coupon { background: var(--accent-gold); color: #000; border: none; padding: 0 1rem; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.82rem; }
@@ -395,30 +394,20 @@
       measurementId: "G-4MHCK3WP5L"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const db = getFirestore(app);
 
     const WHATSAPP_NUMBER = "8801614824987";
 
-    // ফলব্যাক বা ডিফল্ট প্রোডাক্ট তালিকা (ডাটাবেজ লোড হওয়ার আগে বা ফেইল করলে দেখানোর জন্য)
-    let products = [
-      { id: 1, title: "Aesthetic Study Desk Setup Kit", price: 850, category: "study", theme: "theme-red", badge: "Best Seller", image: "https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?w=500", desc: "আই-কেয়ার LED ল্যাম্প, এক্রিলিক টু-ডু বোর্ড এবং কলমদানি কম্বো।" }
-    ];
-
+    let products = [];
     let coupons = [];
     let appliedCoupon = null;
-
-    let reviews = {
-      1: [{ name: "রাহিম আহমেদ", rating: 5, comment: "খুব চমৎকার একটি কিট! টেবিলের সৌন্দর্য অনেক বাড়িয়ে দিয়েছে।" }]
-    };
-
+    let reviews = {};
     let cart = {};
     let activeCategory = 'all';
     let currentReviewProductId = null;
 
-    // ফায়ারস্টোর থেকে প্রোডাক্ট ফেচ করা
     async function fetchProductsFromFirebase() {
       try {
         const querySnapshot = await getDocs(collection(db, "products"));
@@ -434,7 +423,6 @@
       renderProducts();
     }
 
-    // ফায়ারস্টোর থেকে কুপন ফেচ করা
     async function fetchCouponsFromFirebase() {
       try {
         const querySnapshot = await getDocs(collection(db, "coupons"));
@@ -444,6 +432,23 @@
         });
       } catch (error) {
         console.error("Error fetching coupons:", error);
+      }
+    }
+
+    // ফায়ারস্টোর থেকে রিভিউ ফেচ করা
+    async function fetchReviewsFromFirebase() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "reviews"));
+        reviews = {};
+        querySnapshot.forEach((doc) => {
+          const r = doc.data();
+          if(!reviews[r.productId]) {
+            reviews[r.productId] = [];
+          }
+          reviews[r.productId].push(r);
+        });
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
       }
     }
 
@@ -562,8 +567,9 @@
 
     window.filterProducts = function() { renderProducts(); }
 
-    window.openReviewModal = function(productId) {
+    window.openReviewModal = async function(productId) {
       currentReviewProductId = productId;
+      await fetchReviewsFromFirebase();
       const product = products.find(p => p.id == productId);
       document.getElementById('reviewTitle').innerText = `${product ? product.title : 'প্রোডাক্ট'} - রিভিউ`;
       loadReviewsList();
@@ -601,7 +607,7 @@
       listContainer.innerHTML = html;
     }
 
-    window.addReview = function() {
+    window.addReview = async function() {
       const name = document.getElementById('revName').value.trim();
       const rating = parseInt(document.getElementById('revRating').value);
       const comment = document.getElementById('revComment').value.trim();
@@ -610,16 +616,29 @@
         return alert("দয়া করে আপনার নাম এবং মতামত লিখুন!");
       }
 
-      if(!reviews[currentReviewProductId]) {
-        reviews[currentReviewProductId] = [];
-      }
+      const reviewData = {
+        productId: currentReviewProductId,
+        name: name,
+        rating: rating,
+        comment: comment,
+        date: new Date().toISOString()
+      };
 
-      reviews[currentReviewProductId].unshift({ name, rating, comment });
-      loadReviewsList();
-      
-      document.getElementById('revName').value = '';
-      document.getElementById('revComment').value = '';
-      alert("আপনার মূল্যবান রিভিউটি সফলভাবে যোগ হয়েছে!");
+      try {
+        await addDoc(collection(db, "reviews"), reviewData);
+        if(!reviews[currentReviewProductId]) {
+          reviews[currentReviewProductId] = [];
+        }
+        reviews[currentReviewProductId].unshift(reviewData);
+        loadReviewsList();
+        
+        document.getElementById('revName').value = '';
+        document.getElementById('revComment').value = '';
+        alert("আপনার মূল্যবান রিভিউটি সফলভাবে যোগ হয়েছে!");
+      } catch (error) {
+        console.error("Error adding review:", error);
+        alert("রিভিউ জমা দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      }
     }
 
     function updateModalTotals() {
@@ -711,7 +730,6 @@
       const advanceAmt = Math.round(totalAmount * 0.30);
       const codAmt = totalAmount - advanceAmt;
 
-      // ফায়ারবেসের orders কালেকশনে অর্ডার সেভ করা
       const orderData = {
         customerName: name,
         customerPhone: phone,
@@ -773,6 +791,7 @@
     // পেজ লোড হওয়ার সাথে সাথে ফায়ারবেস থেকে ডাটা ফেচ করা
     fetchProductsFromFirebase();
     fetchCouponsFromFirebase();
+    fetchReviewsFromFirebase();
   </script>
 </body>
 </html>
