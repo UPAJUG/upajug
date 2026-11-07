@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>উপযোগ - অ্যাডমিন প্যানেল</title>
+  <!-- Google Fonts: Noto Serif Bengali -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0b1325 0%, #111a2e 50%, #080d19 100%);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-orange: #ff6b00;
+      --accent-gold: #ffb703;
+      --gradient-orange: linear-gradient(135deg, #ff8c00, #ff4500);
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Serif Bengali', serif; }
+    
+    body { 
+      background: var(--bg-gradient); 
+      background-attachment: fixed;
+      color: var(--text-main); 
+      min-height: 100vh;
+      padding-bottom: 50px;
+    }
+
+    header {
+      background: rgba(13, 22, 41, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 0.8rem 1rem;
+      position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid rgba(255, 107, 0, 0.25);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    .brand-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff, var(--accent-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .admin-card {
+      background: rgba(19, 31, 56, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px dashed rgba(255, 107, 0, 0.3);
+      padding-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #080d19;
+      color: #fff;
+      outline: none;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent-orange);
+      box-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.85rem;
+      border-radius: 12px;
+      border: none;
+      background: var(--gradient-orange);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
+      margin-top: 1rem;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* পিন সিকিউরিটি স্ক্রিন */
+    .lock-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(11, 19, 37, 0.95);
+      backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .lock-box {
+      background: #111a2e;
+      padding: 2rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 107, 0, 0.3);
+      text-align: center;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    }
+
+    .status-msg {
+      padding: 0.8rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      font-size: 0.88rem;
+      display: none;
+    }
+    .status-msg.success { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
+    .status-msg.error { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); border: 1px solid var(--accent-red); }
+  </style>
+</head>
+<body>
+
+  <!-- সিকিউরিটি লক স্ক্রিন -->
+  <div class="lock-overlay" id="lockOverlay">
+    <div class="lock-box">
+      <i class="fa-solid fa-user-shield" style="font-size: 3rem; color: var(--accent-gold); margin-bottom: 1rem;"></i>
+      <h3 style="margin-bottom: 0.5rem; color: #fff;">অ্যাডমিন অ্যাক্সেস</h3>
+      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.2rem;">প্রবেশ করতে পাসওয়ার্ড পিন প্রদান করুন</p>
+      
+      <input type="password" id="adminPin" class="form-control" placeholder="পিন টাইপ করুন" style="text-align: center; font-size: 1.2rem; letter-spacing: 4px; margin-bottom: 1rem;">
+      <button class="btn-submit" onclick="verifyPin()"><i class="fa-solid fa-key"></i> প্যানেল আনলক করুন</button>
+      <p id="pinError" style="color: var(--accent-red); font-size: 0.8rem; margin-top: 8px; display: none;">ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।</p>
+    </div>
+  </div>
+
+  <!-- অ্যাডমিন নেভিগেশন হেডার -->
+  <header>
+    <div class="brand-title">উপযোগ - অ্যাডমিন কন্ট্রোল প্যানেল</div>
+  </header>
+
+  <div class="container">
+    <div class="admin-card">
+      <div class="card-title">
+        <i class="fa-solid fa-plus-circle"></i> নতুন প্রোডাক্ট যুক্ত করুন
+      </div>
+
+      <div id="statusMsg" class="status-msg"></div>
+
+      <form id="productForm">
+        <div class="form-group">
+          <label>প্রোডাক্টের নাম *</label>
+          <input type="text" id="prodTitle" class="form-control" placeholder="যেমন: Aesthetic Study Desk Kit" required>
+        </div>
+
+        <div class="form-group">
+          <label>মূল্য (টাকা) *</label>
+          <input type="number" id="prodPrice" class="form-control" placeholder="যেমন: 850" required>
+        </div>
+
+        <div class="form-group">
+          <label>ক্যাটাগরি *</label>
+          <select id="prodCategory" class="form-control" required>
+            <option value="study">স্টাডি কিট (study)</option>
+            <option value="tech">টেক ও গ্যাজেট (tech)</option>
+            <option value="gift">গিফট প্যাক (gift)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>প্রোডাক্ট বিবরণ *</label>
+          <textarea id="prodDesc" class="form-control" placeholder="প্রোডাক্টের বিশেষত্ব ও ফিচার লিখুন..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>ছবি লিংক (Image URL) *</label>
+          <input type="url" id="prodImage" class="form-control" placeholder="https://images.unsplash.com/..." required>
+        </div>
+
+        <div class="form-group">
+          <label>ব্যাজ বা ট্যাগ (ঐচ্ছিক)</label>
+          <input type="text" id="prodBadge" class="form-control" placeholder="যেমন: Best Seller / Trending / New">
+        </div>
+
+        <div class="form-group">
+          <label>কার্ডের কালার থিম *</label>
+          <select id="prodTheme" class="form-control" required>
+            <option value="theme-purple">পার্পল থিম (Purple)</option>
+            <option value="theme-red">রেড থিম (Red)</option>
+            <option value="theme-blue">ব্লু থিম (Blue)</option>
+            <option value="theme-yellow">ইয়েলো থিম (Yellow)</option>
+          </select>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-submit">
+          <i class="fa-solid fa-cloud-arrow-up"></i> ফায়ারবেসে সেভ করুন
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Firebase integration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // আপনার ফায়ারবেস কনফিগারেশন
+    const firebaseConfig = {
+      apiKey: "AIzaSyBIWTUniMXQ1APED_oaPHAPeHklr0NsJqA",
+      authDomain: "upojog-shop.firebaseapp.com",
+      projectId: "upojog-shop",
+      storageBucket: "upojog-shop.firebasestorage.app",
+      messagingSenderId: "614249564429",
+      appId: "1:614249564429:web:55aa28e3a1a948ce254844",
+      measurementId: "G-4MHCK3WP5L"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // সিকিউরিটি পিন (ডিফল্ট: 1234)
+    const SECRET_PIN = "1234"; 
+
+    window.verifyPin = function() {
+      const inputPin = document.getElementById('adminPin').value;
+      const errorMsg = document.getElementById('pinError');
+      
+      if(inputPin === SECRET_PIN) {
+        document.getElementById('lockOverlay').style.display = 'none';
+      } else {
+        errorMsg.style.display = 'block';
+      }
+    };
+
+    // ফর্ম সাবমিশন হ্যান্ডলার
+    const form = document.getElementById('productForm');
+    const statusMsg = document.getElementById('statusMsg');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> সেভ হচ্ছে...`;
+
+      const newProduct = {
+        title: document.getElementById('prodTitle').value.trim(),
+        price: Number(document.getElementById('prodPrice').value),
+        category: document.getElementById('prodCategory').value,
+        desc: document.getElementById('prodDesc').value.trim(),
+        image: document.getElementById('prodImage').value.trim(),
+        badge: document.getElementById('prodBadge').value.trim() || 'New',
+        theme: document.getElementById('prodTheme').value
+      };
+
+      try {
+        await addDoc(collection(db, "products"), newProduct);
+        
+        showStatus("🎉 নতুন প্রোডাক্টটি সফলভাবে ফায়ারবেসে যুক্ত করা হয়েছে!", "success");
+        form.reset();
+      } catch (error) {
+        console.error("Error adding document: ", error);
+        showStatus("❌ প্রোডাক্ট যোগ করা সম্ভব হয়নি। আবার চেষ্টা করুন!", "error");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> ফায়ারবেসে সেভ করুন`;
+      }
+    });
+
+    function showStatus(message, type) {
+      statusMsg.innerText = message;
+      statusMsg.className = `status-msg ${type}`;
+      statusMsg.style.display = 'block';
+      setTimeout(() => {
+        statusMsg.style.display = 'none';
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
