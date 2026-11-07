@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>উপযোগ - অ্যাডমিন কন্ট্রোল প্যানেল</title>
-  <!-- Google Fonts: Noto Serif Bengali -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -22,251 +21,72 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Serif Bengali', serif; }
-    
-    body { 
-      background: var(--bg-gradient); 
-      background-attachment: fixed;
-      color: var(--text-main); 
-      min-height: 100vh;
-      padding-bottom: 50px;
-    }
+    body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-main); min-height: 100vh; padding-bottom: 50px; }
 
     header {
-      background: rgba(13, 22, 41, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      padding: 0.8rem 1rem;
-      position: sticky; top: 0; z-index: 100;
-      border-bottom: 1px solid rgba(255, 107, 0, 0.25);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-      text-align: center;
+      background: rgba(13, 22, 41, 0.75); backdrop-filter: blur(16px);
+      padding: 0.8rem 1rem; position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid rgba(255, 107, 0, 0.25); text-align: center;
     }
+    .brand-title { font-size: 1.4rem; font-weight: 800; background: linear-gradient(135deg, #ffffff, var(--accent-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    .brand-title {
-      font-size: 1.4rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffffff, var(--accent-gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .container {
-      max-width: 700px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
+    .container { max-width: 750px; margin: 2rem auto; padding: 0 1rem; display: flex; flex-direction: column; gap: 2rem; }
 
     .admin-card {
-      background: rgba(19, 31, 56, 0.65);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 20px;
-      padding: 2rem;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(19, 31, 56, 0.65); backdrop-filter: blur(16px);
+      border-radius: 20px; padding: 1.8rem; border: 1px solid rgba(255, 255, 255, 0.12);
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
     }
+    .card-title { font-size: 1.25rem; font-weight: 700; color: var(--accent-gold); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 10px; border-bottom: 1px dashed rgba(255, 107, 0, 0.3); padding-bottom: 10px; }
 
-    .card-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--accent-gold);
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-bottom: 1px dashed rgba(255, 107, 0, 0.3);
-      padding-bottom: 10px;
-    }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label { display: block; font-size: 0.88rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+    .form-control { width: 100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); background: #080d19; color: #fff; outline: none; font-size: 0.95rem; }
+    .form-control:focus { border-color: var(--accent-orange); }
 
-    .form-group {
-      margin-bottom: 1.2rem;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: #080d19;
-      color: #fff;
-      outline: none;
-      font-size: 0.95rem;
-      transition: 0.3s;
-    }
-
-    .form-control:focus {
-      border-color: var(--accent-orange);
-      box-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
-    }
-
-    textarea.form-control {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 0.85rem;
-      border-radius: 12px;
-      border: none;
-      background: var(--gradient-orange);
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
-      margin-top: 1rem;
-    }
-
-    .btn-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
-    }
-
-    .btn-cancel {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      margin-top: 0.5rem;
-      display: none;
-    }
-
-    /* প্রডাক্ট ম্যানেজমেন্ট লিস্ট */
-    .product-list-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(8, 13, 25, 0.6);
-      padding: 1rem;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .product-info h4 {
-      font-size: 1rem;
-      color: #fff;
-      margin-bottom: 3px;
-    }
-
-    .product-info p {
-      font-size: 0.82rem;
-      color: var(--accent-gold);
-    }
-
-    .action-btns {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-action {
-      padding: 6px 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
+    .btn-submit { width: 100%; padding: 0.85rem; border-radius: 12px; border: none; background: var(--gradient-orange); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 1rem; }
+    
+    .list-item { display: flex; justify-content: space-between; align-items: center; background: rgba(8, 13, 25, 0.6); padding: 0.9rem; border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(255, 255, 255, 0.08); }
+    .btn-action { padding: 6px 12px; border-radius: 8px; border: none; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
     .btn-edit { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
-    .btn-edit:hover { background: rgba(59, 130, 246, 0.4); }
+    .btn-del { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); margin-left: 5px; }
 
-    .btn-del { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
-    .btn-del:hover { background: rgba(239, 68, 68, 0.4); }
-
-    /* সিকিউরিটি লক স্ক্রিন */
-    .lock-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(11, 19, 37, 0.95);
-      backdrop-filter: blur(12px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 1rem;
-    }
-
-    .lock-box {
-      background: #111a2e;
-      padding: 2rem;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 107, 0, 0.3);
-      text-align: center;
-      max-width: 380px;
-      width: 100%;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-    }
-
-    .status-msg {
-      padding: 0.8rem;
-      border-radius: 10px;
-      margin-bottom: 1rem;
-      font-size: 0.88rem;
-      display: none;
-    }
+    .lock-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 19, 37, 0.95); backdrop-filter: blur(12px); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 1rem; }
+    .lock-box { background: #111a2e; padding: 2rem; border-radius: 20px; border: 1px solid rgba(255, 107, 0, 0.3); text-align: center; max-width: 380px; width: 100%; }
+    .status-msg { padding: 0.8rem; border-radius: 10px; margin-bottom: 1rem; font-size: 0.88rem; display: none; }
     .status-msg.success { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
     .status-msg.error { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); border: 1px solid var(--accent-red); }
   </style>
 </head>
 <body>
 
-  <!-- সিকিউরিটি লক স্ক্রিন -->
   <div class="lock-overlay" id="lockOverlay">
     <div class="lock-box">
       <i class="fa-solid fa-user-shield" style="font-size: 3rem; color: var(--accent-gold); margin-bottom: 1rem;"></i>
       <h3 style="margin-bottom: 0.5rem; color: #fff;">অ্যাডমিন অ্যাক্সেস</h3>
-      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.2rem;">প্রবেশ করতে পাসওয়ার্ড পিন প্রদান করুন</p>
-      
-      <input type="password" id="adminPin" class="form-control" placeholder="পিন টাইপ করুন" style="text-align: center; font-size: 1.2rem; letter-spacing: 4px; margin-bottom: 1rem;">
-      <button class="btn-submit" onclick="verifyPin()"><i class="fa-solid fa-key"></i> প্যানেল আনলক করুন</button>
-      <p id="pinError" style="color: var(--accent-red); font-size: 0.8rem; margin-top: 8px; display: none;">ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।</p>
+      <input type="password" id="adminPin" class="form-control" placeholder="PIN লিখুন" style="text-align: center; font-size: 1.2rem; margin-bottom: 1rem;">
+      <button class="btn-submit" onclick="verifyPin()"><i class="fa-solid fa-key"></i> প্রবেশ করুন</button>
+      <p id="pinError" style="color: var(--accent-red); font-size: 0.8rem; margin-top: 8px; display: none;">ভুল পিন!</p>
     </div>
   </div>
 
-  <!-- অ্যাডমিন নেভিগেশন হেডার -->
-  <header>
-    <div class="brand-title">উপযোগ - অ্যাডমিন কন্ট্রোল প্যানেল</div>
-  </header>
+  <header><div class="brand-title">উপযোগ - অ্যাডমিন প্যানেল</div></header>
 
   <div class="container">
-    <!-- প্রডাক্ট এন্ট্রি বা এডিট কার্ড -->
+    <!-- ১. প্রডাক্ট এন্ট্রি/এডিট -->
     <div class="admin-card">
-      <div class="card-title" id="formTitleText">
-        <i class="fa-solid fa-plus-circle"></i> নতুন প্রোডাক্ট যুক্ত করুন
-      </div>
-
+      <div class="card-title" id="formTitleText"><i class="fa-solid fa-plus-circle"></i> নতুন প্রোডাক্ট যুক্ত করুন</div>
       <div id="statusMsg" class="status-msg"></div>
-
       <form id="productForm">
         <input type="hidden" id="editProductId">
-
         <div class="form-group">
           <label>প্রোডাক্টের নাম *</label>
-          <input type="text" id="prodTitle" class="form-control" placeholder="যেমন: Aesthetic Study Desk Kit" required>
+          <input type="text" id="prodTitle" class="form-control" placeholder="যেমন: Aesthetic Study Kit" required>
         </div>
-
         <div class="form-group">
           <label>মূল্য (টাকা) *</label>
           <input type="number" id="prodPrice" class="form-control" placeholder="যেমন: 850" required>
         </div>
-
         <div class="form-group">
           <label>ক্যাটাগরি *</label>
           <select id="prodCategory" class="form-control" required>
@@ -275,53 +95,66 @@
             <option value="gift">গিফট প্যাক (gift)</option>
           </select>
         </div>
-
         <div class="form-group">
-          <label>প্রোডাক্ট বিবরণ *</label>
-          <textarea id="prodDesc" class="form-control" placeholder="প্রোডাক্টের বিশেষত্ব ও ফিচার লিখুন..." required></textarea>
+          <label>বিবরণ *</label>
+          <textarea id="prodDesc" class="form-control" placeholder="বিবরণ লিখুন..." required></textarea>
         </div>
-
         <div class="form-group">
-          <label>ছবির ড্রাইভ লিংক (Image Direct URL) *</label>
-          <input type="url" id="prodImage" class="form-control" placeholder="গুগল ড্রাইভ বা যেকোনো ডাইরেক্ট ইমেজ লিংক পেস্ট করুন..." required>
+          <label>ছবির ড্রাইভ লিংক *</label>
+          <input type="url" id="prodImage" class="form-control" placeholder="Direct Image URL..." required>
         </div>
-
         <div class="form-group">
-          <label>ব্যাজ বা ট্যাগ (ঐচ্ছিক)</label>
-          <input type="text" id="prodBadge" class="form-control" placeholder="যেমন: Best Seller / Trending / New">
+          <label>ট্যাগ/ব্যাজ</label>
+          <input type="text" id="prodBadge" class="form-control" placeholder="যেমন: Best Seller / New">
         </div>
-
         <div class="form-group">
-          <label>কার্ডের কালার থিম *</label>
-          <select id="prodTheme" class="form-control" required>
-            <option value="theme-purple">পার্পল থিম (Purple)</option>
-            <option value="theme-red">রেড থিম (Red)</option>
-            <option value="theme-blue">ব্লু থিম (Blue)</option>
-            <option value="theme-yellow">ইয়েলো থিম (Yellow)</option>
+          <label>কালার থিম</label>
+          <select id="prodTheme" class="form-control">
+            <option value="theme-purple">Purple</option>
+            <option value="theme-red">Red</option>
+            <option value="theme-blue">Blue</option>
+            <option value="theme-yellow">Yellow</option>
           </select>
         </div>
-
-        <button type="submit" id="submitBtn" class="btn-submit">
-          <i class="fa-solid fa-cloud-arrow-up"></i> ফায়ারবেসে সেভ করুন
-        </button>
-        <button type="button" id="cancelBtn" class="btn-submit btn-cancel" onclick="resetForm()">
-          এডিট বাতিল করুন
-        </button>
+        <button type="submit" id="submitBtn" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> সেভ করুন</button>
+        <button type="button" id="cancelBtn" class="btn-submit" style="background:rgba(255,255,255,0.1); display:none;" onclick="resetForm()">বাতিল করুন</button>
       </form>
     </div>
 
-    <!-- ডাটাবেজে থাকা প্রডাক্ট লিস্ট (এডিট/ডিলিটের জন্য) -->
+    <!-- ২. কুপন কোড সেটআপ -->
     <div class="admin-card">
-      <div class="card-title">
-        <i class="fa-solid fa-boxes-stacked"></i> বিদ্যমান প্রোডাক্ট ম্যানেজমেন্ট
-      </div>
-      <div id="adminProductList">
-        <p style="color: var(--text-muted); text-size: 0.9rem;">প্রোডাক্ট লোড হচ্ছে...</p>
-      </div>
+      <div class="card-title"><i class="fa-solid fa-ticket"></i> নতুন ডিসকাউন্ট কুপন তৈরি করুন</div>
+      <form id="couponForm">
+        <div class="form-group">
+          <label>কুপন কোড (যেমন: EID20) *</label>
+          <input type="text" id="cpCode" class="form-control" placeholder="EID20" style="text-transform: uppercase;" required>
+        </div>
+        <div class="form-group">
+          <label>ডিসকাউন্ট পার্সেন্ট (%) *</label>
+          <input type="number" id="cpPercent" class="form-control" placeholder="যেমন: 20 (মানে ২০% ছাড়)" required>
+        </div>
+        <div class="form-group">
+          <label>প্রযোজ্য প্রডাক্ট (ঐচ্ছিক)</label>
+          <select id="cpProductId" class="form-control">
+            <option value="ALL">সকল প্রডাক্টের জন্য প্রযোজ্য</option>
+          </select>
+        </div>
+        <button type="submit" id="cpSubmitBtn" class="btn-submit" style="background: linear-gradient(135deg, #10b981, #059669);">
+          <i class="fa-solid fa-plus"></i> কুপন যুক্ত করুন
+        </button>
+      </form>
+
+      <h4 style="margin-top: 1.5rem; margin-bottom: 0.8rem; font-size: 0.95rem; color: var(--accent-gold);">বিদ্যমান কুপনসমূহ:</h4>
+      <div id="couponListContainer"><p style="font-size:0.85rem; color:var(--text-muted);">কুপন লোড হচ্ছে...</p></div>
+    </div>
+
+    <!-- ৩. বিদ্যমান প্রডাক্ট ম্যানেজমেন্ট -->
+    <div class="admin-card">
+      <div class="card-title"><i class="fa-solid fa-boxes-stacked"></i> সমস্ত প্রোডাক্ট লিস্ট</div>
+      <div id="adminProductList"><p style="font-size: 0.88rem; color: var(--text-muted);">লোড হচ্ছে...</p></div>
     </div>
   </div>
 
-  <!-- Firebase integration -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -332,24 +165,19 @@
       projectId: "upojog-shop",
       storageBucket: "upojog-shop.firebasestorage.app",
       messagingSenderId: "614249564429",
-      appId: "1:614249564429:web:55aa28e3a1a948ce254844",
-      measurementId: "G-4MHCK3WP5L"
+      appId: "1:614249564429:web:55aa28e3a1a948ce254844"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const SECRET_PIN = "1234"; 
-
     window.verifyPin = function() {
-      const inputPin = document.getElementById('adminPin').value;
-      const errorMsg = document.getElementById('pinError');
-      
-      if(inputPin === SECRET_PIN) {
+      if(document.getElementById('adminPin').value === "1234") {
         document.getElementById('lockOverlay').style.display = 'none';
         loadAdminProducts();
+        loadAdminCoupons();
       } else {
-        errorMsg.style.display = 'block';
+        document.getElementById('pinError').style.display = 'block';
       }
     };
 
@@ -357,44 +185,98 @@
 
     async function loadAdminProducts() {
       const listContainer = document.getElementById('adminProductList');
+      const cpSelect = document.getElementById('cpProductId');
       try {
         const querySnapshot = await getDocs(collection(db, "products"));
         allProducts = [];
+        let selectHtml = `<option value="ALL">সকল প্রডাক্টের জন্য প্রযোজ্য</option>`;
+
         querySnapshot.forEach((docSnap) => {
-          allProducts.push({ id: docSnap.id, ...docSnap.data() });
+          const p = { id: docSnap.id, ...docSnap.data() };
+          allProducts.push(p);
+          selectHtml += `<option value="${p.id}">${p.title}</option>`;
         });
 
+        cpSelect.innerHTML = selectHtml;
+
         if(allProducts.length === 0) {
-          listContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.88rem;">কোনো প্রোডাক্ট পাওয়া যায়নি।</p>`;
+          listContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.88rem;">কোনো প্রোডাক্ট নেই।</p>`;
           return;
         }
 
         let html = '';
         allProducts.forEach(p => {
           html += `
-            <div class="product-list-item">
-              <div class="product-info">
-                <h4>${p.title}</h4>
-                <p>মূল্য: ৳${p.price} | ক্যাটাগরি: ${p.category}</p>
+            <div class="list-item">
+              <div>
+                <h4 style="color:#fff;">${p.title}</h4>
+                <p style="font-size:0.8rem; color:var(--accent-gold);">৳${p.price} | ID: ${p.id}</p>
               </div>
-              <div class="action-btns">
-                <button class="btn-action btn-edit" onclick="prepareEdit('${p.id}')"><i class="fa-solid fa-pen"></i> এডিট</button>
-                <button class="btn-action btn-del" onclick="deleteProduct('${p.id}')"><i class="fa-solid fa-trash"></i> ডিলিট</button>
+              <div>
+                <button class="btn-action btn-edit" onclick="prepareEdit('${p.id}')">এডিট</button>
+                <button class="btn-action btn-del" onclick="deleteProduct('${p.id}')">ডিলিট</button>
               </div>
-            </div>
-          `;
+            </div>`;
         });
         listContainer.innerHTML = html;
-      } catch (error) {
-        console.error("Error loading products:", error);
-        listContainer.innerHTML = `<p style="color: var(--accent-red); font-size: 0.88rem;">প্রোডাক্ট লোড করতে সমস্যা হয়েছে।</p>`;
+      } catch (e) {
+        listContainer.innerHTML = `<p style="color:var(--accent-red);">এরর হয়েছে!</p>`;
       }
     }
+
+    async function loadAdminCoupons() {
+      const container = document.getElementById('couponListContainer');
+      try {
+        const querySnapshot = await getDocs(collection(db, "coupons"));
+        if(querySnapshot.empty) {
+          container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted);">কোনো কুপন তৈরি করা হয়নি।</p>`;
+          return;
+        }
+        let html = '';
+        querySnapshot.forEach((docSnap) => {
+          const c = docSnap.data();
+          const targetName = c.productId === 'ALL' ? 'সকল প্রডাক্ট' : (allProducts.find(x => x.id === c.productId)?.title || c.productId);
+          html += `
+            <div class="list-item">
+              <div>
+                <strong style="color:var(--accent-gold); font-size:1rem;">${c.code}</strong> (${c.percent}% ছাড়)
+                <p style="font-size:0.78rem; color:var(--text-muted);">প্রযোজ্য: ${targetName}</p>
+              </div>
+              <button class="btn-action btn-del" onclick="deleteCoupon('${docSnap.id}')">মুছুন</button>
+            </div>`;
+        });
+        container.innerHTML = html;
+      } catch (e) {
+        container.innerHTML = `<p style="color:var(--accent-red); font-size:0.8rem;">কুপন লোড ফেইল্ড!</p>`;
+      }
+    }
+
+    document.getElementById('couponForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const code = document.getElementById('cpCode').value.trim().toUpperCase();
+      const percent = Number(document.getElementById('cpPercent').value);
+      const productId = document.getElementById('cpProductId').value;
+
+      try {
+        await addDoc(collection(db, "coupons"), { code, percent, productId });
+        alert("🎉 নতুন কুপন সফলভাবে যুক্ত হয়েছে!");
+        document.getElementById('couponForm').reset();
+        loadAdminCoupons();
+      } catch (err) {
+        alert("❌ কুপন যুক্ত করা যায়নি!");
+      }
+    });
+
+    window.deleteCoupon = async function(id) {
+      if(confirm("কুপনটি ডিলিট করবেন?")) {
+        await deleteDoc(doc(db, "coupons", id));
+        loadAdminCoupons();
+      }
+    };
 
     window.prepareEdit = function(id) {
       const p = allProducts.find(x => x.id === id);
       if(!p) return;
-
       document.getElementById('editProductId').value = p.id;
       document.getElementById('prodTitle').value = p.title;
       document.getElementById('prodPrice').value = p.price;
@@ -403,46 +285,28 @@
       document.getElementById('prodImage').value = p.image;
       document.getElementById('prodBadge').value = p.badge || '';
       document.getElementById('prodTheme').value = p.theme || 'theme-purple';
-
       document.getElementById('formTitleText').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> প্রোডাক্ট এডিট করুন`;
-      document.getElementById('submitBtn').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> পরিবর্তন সেভ করুন`;
       document.getElementById('cancelBtn').style.display = 'block';
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    };
 
     window.resetForm = function() {
       document.getElementById('productForm').reset();
       document.getElementById('editProductId').value = '';
       document.getElementById('formTitleText').innerHTML = `<i class="fa-solid fa-plus-circle"></i> নতুন প্রোডাক্ট যুক্ত করুন`;
-      document.getElementById('submitBtn').innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> ফায়ারবেসে সেভ করুন`;
       document.getElementById('cancelBtn').style.display = 'none';
-    }
+    };
 
     window.deleteProduct = async function(id) {
-      if(confirm("আপনি কি নিশ্চিতভাবে এই প্রোডাক্টটি ডিলিট করতে চান?")) {
-        try {
-          await deleteDoc(doc(db, "products", id));
-          showStatus("🗑️ প্রোডাক্টটি সফলভাবে মুছে ফেলা হয়েছে!", "success");
-          loadAdminProducts();
-        } catch (error) {
-          console.error("Error deleting product:", error);
-          showStatus("❌ প্রোডাক্ট ডিলিট করা যায়নি!", "error");
-        }
+      if(confirm("প্রোডাক্টটি ডিলিট করতে চান?")) {
+        await deleteDoc(doc(db, "products", id));
+        loadAdminProducts();
       }
-    }
+    };
 
-    const form = document.getElementById('productForm');
-    const statusMsg = document.getElementById('statusMsg');
-    const submitBtn = document.getElementById('submitBtn');
-
-    form.addEventListener('submit', async (e) => {
+    document.getElementById('productForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
       const editId = document.getElementById('editProductId').value;
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> প্রসেসিং হচ্ছে...`;
-
       const productData = {
         title: document.getElementById('prodTitle').value.trim(),
         price: Number(document.getElementById('prodPrice').value),
@@ -453,40 +317,15 @@
         theme: document.getElementById('prodTheme').value
       };
 
-      try {
-        if(editId) {
-          // এডিট মোড
-          await updateDoc(doc(db, "products", editId), productData);
-          showStatus("✨ প্রোডাক্টের তথ্য সফলভাবে আপডেট করা হয়েছে!", "success");
-          resetForm();
-        } else {
-          // নতুন অ্যাড মোড
-          await addDoc(collection(db, "products"), productData);
-          showStatus("🎉 নতুন প্রোডাক্টটি সফলভাবে ফায়ারবেসে যুক্ত করা হয়েছে!", "success");
-          form.reset();
-        }
-        loadAdminProducts();
-      } catch (error) {
-        console.error("Error saving document: ", error);
-        showStatus("❌ অপারেশন সম্পন্ন হয়নি। আবার চেষ্টা করুন!", "error");
-      } finally {
-        submitBtn.disabled = false;
-        if(!editId) {
-          submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> ফায়ারবেসে সেভ করুন`;
-        } else {
-          submitBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> পরিবর্তন সেভ করুন`;
-        }
+      if(editId) {
+        await updateDoc(doc(db, "products", editId), productData);
+        resetForm();
+      } else {
+        await addDoc(collection(db, "products"), productData);
+        document.getElementById('productForm').reset();
       }
+      loadAdminProducts();
     });
-
-    function showStatus(message, type) {
-      statusMsg.innerText = message;
-      statusMsg.className = `status-msg ${type}`;
-      statusMsg.style.display = 'block';
-      setTimeout(() => {
-        statusMsg.style.display = 'none';
-      }, 4000);
-    }
   </script>
 </body>
 </html>
