@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>উপযোগ - অ্যাডমিন প্যানেল</title>
+  <title>উপযোগ - অ্যাডমিন কন্ট্রোল প্যানেল</title>
   <!-- Google Fonts: Noto Serif Bengali -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,9 +51,12 @@
     }
 
     .container {
-      max-width: 600px;
+      max-width: 700px;
       margin: 2rem auto;
       padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
     }
 
     .admin-card {
@@ -136,13 +139,58 @@
       box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
     }
 
-    .btn-submit:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
+    .btn-cancel {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      margin-top: 0.5rem;
+      display: none;
     }
 
-    /* পিন সিকিউরিটি স্ক্রিন */
+    /* প্রডাক্ট ম্যানেজমেন্ট লিস্ট */
+    .product-list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(8, 13, 25, 0.6);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .product-info h4 {
+      font-size: 1rem;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+
+    .product-info p {
+      font-size: 0.82rem;
+      color: var(--accent-gold);
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-action {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-edit { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+    .btn-edit:hover { background: rgba(59, 130, 246, 0.4); }
+
+    .btn-del { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .btn-del:hover { background: rgba(239, 68, 68, 0.4); }
+
+    /* সিকিউরিটি লক স্ক্রিন */
     .lock-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -198,14 +246,17 @@
   </header>
 
   <div class="container">
+    <!-- প্রডাক্ট এন্ট্রি বা এডিট কার্ড -->
     <div class="admin-card">
-      <div class="card-title">
+      <div class="card-title" id="formTitleText">
         <i class="fa-solid fa-plus-circle"></i> নতুন প্রোডাক্ট যুক্ত করুন
       </div>
 
       <div id="statusMsg" class="status-msg"></div>
 
       <form id="productForm">
+        <input type="hidden" id="editProductId">
+
         <div class="form-group">
           <label>প্রোডাক্টের নাম *</label>
           <input type="text" id="prodTitle" class="form-control" placeholder="যেমন: Aesthetic Study Desk Kit" required>
@@ -231,8 +282,8 @@
         </div>
 
         <div class="form-group">
-          <label>ছবি লিংক (Image URL) *</label>
-          <input type="url" id="prodImage" class="form-control" placeholder="https://images.unsplash.com/..." required>
+          <label>ছবির ড্রাইভ লিংক (Image Direct URL) *</label>
+          <input type="url" id="prodImage" class="form-control" placeholder="গুগল ড্রাইভ বা যেকোনো ডাইরেক্ট ইমেজ লিংক পেস্ট করুন..." required>
         </div>
 
         <div class="form-group">
@@ -253,16 +304,28 @@
         <button type="submit" id="submitBtn" class="btn-submit">
           <i class="fa-solid fa-cloud-arrow-up"></i> ফায়ারবেসে সেভ করুন
         </button>
+        <button type="button" id="cancelBtn" class="btn-submit btn-cancel" onclick="resetForm()">
+          এডিট বাতিল করুন
+        </button>
       </form>
+    </div>
+
+    <!-- ডাটাবেজে থাকা প্রডাক্ট লিস্ট (এডিট/ডিলিটের জন্য) -->
+    <div class="admin-card">
+      <div class="card-title">
+        <i class="fa-solid fa-boxes-stacked"></i> বিদ্যমান প্রোডাক্ট ম্যানেজমেন্ট
+      </div>
+      <div id="adminProductList">
+        <p style="color: var(--text-muted); text-size: 0.9rem;">প্রোডাক্ট লোড হচ্ছে...</p>
+      </div>
     </div>
   </div>
 
   <!-- Firebase integration -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // আপনার ফায়ারবেস কনফিগারেশন
     const firebaseConfig = {
       apiKey: "AIzaSyBIWTUniMXQ1APED_oaPHAPeHklr0NsJqA",
       authDomain: "upojog-shop.firebaseapp.com",
@@ -276,7 +339,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // সিকিউরিটি পিন (ডিফল্ট: 1234)
     const SECRET_PIN = "1234"; 
 
     window.verifyPin = function() {
@@ -285,12 +347,91 @@
       
       if(inputPin === SECRET_PIN) {
         document.getElementById('lockOverlay').style.display = 'none';
+        loadAdminProducts();
       } else {
         errorMsg.style.display = 'block';
       }
     };
 
-    // ফর্ম সাবমিশন হ্যান্ডলার
+    let allProducts = [];
+
+    async function loadAdminProducts() {
+      const listContainer = document.getElementById('adminProductList');
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        allProducts = [];
+        querySnapshot.forEach((docSnap) => {
+          allProducts.push({ id: docSnap.id, ...docSnap.data() });
+        });
+
+        if(allProducts.length === 0) {
+          listContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.88rem;">কোনো প্রোডাক্ট পাওয়া যায়নি।</p>`;
+          return;
+        }
+
+        let html = '';
+        allProducts.forEach(p => {
+          html += `
+            <div class="product-list-item">
+              <div class="product-info">
+                <h4>${p.title}</h4>
+                <p>মূল্য: ৳${p.price} | ক্যাটাগরি: ${p.category}</p>
+              </div>
+              <div class="action-btns">
+                <button class="btn-action btn-edit" onclick="prepareEdit('${p.id}')"><i class="fa-solid fa-pen"></i> এডিট</button>
+                <button class="btn-action btn-del" onclick="deleteProduct('${p.id}')"><i class="fa-solid fa-trash"></i> ডিলিট</button>
+              </div>
+            </div>
+          `;
+        });
+        listContainer.innerHTML = html;
+      } catch (error) {
+        console.error("Error loading products:", error);
+        listContainer.innerHTML = `<p style="color: var(--accent-red); font-size: 0.88rem;">প্রোডাক্ট লোড করতে সমস্যা হয়েছে।</p>`;
+      }
+    }
+
+    window.prepareEdit = function(id) {
+      const p = allProducts.find(x => x.id === id);
+      if(!p) return;
+
+      document.getElementById('editProductId').value = p.id;
+      document.getElementById('prodTitle').value = p.title;
+      document.getElementById('prodPrice').value = p.price;
+      document.getElementById('prodCategory').value = p.category;
+      document.getElementById('prodDesc').value = p.desc;
+      document.getElementById('prodImage').value = p.image;
+      document.getElementById('prodBadge').value = p.badge || '';
+      document.getElementById('prodTheme').value = p.theme || 'theme-purple';
+
+      document.getElementById('formTitleText').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> প্রোডাক্ট এডিট করুন`;
+      document.getElementById('submitBtn').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> পরিবর্তন সেভ করুন`;
+      document.getElementById('cancelBtn').style.display = 'block';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.resetForm = function() {
+      document.getElementById('productForm').reset();
+      document.getElementById('editProductId').value = '';
+      document.getElementById('formTitleText').innerHTML = `<i class="fa-solid fa-plus-circle"></i> নতুন প্রোডাক্ট যুক্ত করুন`;
+      document.getElementById('submitBtn').innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> ফায়ারবেসে সেভ করুন`;
+      document.getElementById('cancelBtn').style.display = 'none';
+    }
+
+    window.deleteProduct = async function(id) {
+      if(confirm("আপনি কি নিশ্চিতভাবে এই প্রোডাক্টটি ডিলিট করতে চান?")) {
+        try {
+          await deleteDoc(doc(db, "products", id));
+          showStatus("🗑️ প্রোডাক্টটি সফলভাবে মুছে ফেলা হয়েছে!", "success");
+          loadAdminProducts();
+        } catch (error) {
+          console.error("Error deleting product:", error);
+          showStatus("❌ প্রোডাক্ট ডিলিট করা যায়নি!", "error");
+        }
+      }
+    }
+
     const form = document.getElementById('productForm');
     const statusMsg = document.getElementById('statusMsg');
     const submitBtn = document.getElementById('submitBtn');
@@ -298,10 +439,11 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
+      const editId = document.getElementById('editProductId').value;
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> সেভ হচ্ছে...`;
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> প্রসেসিং হচ্ছে...`;
 
-      const newProduct = {
+      const productData = {
         title: document.getElementById('prodTitle').value.trim(),
         price: Number(document.getElementById('prodPrice').value),
         category: document.getElementById('prodCategory').value,
@@ -312,16 +454,28 @@
       };
 
       try {
-        await addDoc(collection(db, "products"), newProduct);
-        
-        showStatus("🎉 নতুন প্রোডাক্টটি সফলভাবে ফায়ারবেসে যুক্ত করা হয়েছে!", "success");
-        form.reset();
+        if(editId) {
+          // এডিট মোড
+          await updateDoc(doc(db, "products", editId), productData);
+          showStatus("✨ প্রোডাক্টের তথ্য সফলভাবে আপডেট করা হয়েছে!", "success");
+          resetForm();
+        } else {
+          // নতুন অ্যাড মোড
+          await addDoc(collection(db, "products"), productData);
+          showStatus("🎉 নতুন প্রোডাক্টটি সফলভাবে ফায়ারবেসে যুক্ত করা হয়েছে!", "success");
+          form.reset();
+        }
+        loadAdminProducts();
       } catch (error) {
-        console.error("Error adding document: ", error);
-        showStatus("❌ প্রোডাক্ট যোগ করা সম্ভব হয়নি। আবার চেষ্টা করুন!", "error");
+        console.error("Error saving document: ", error);
+        showStatus("❌ অপারেশন সম্পন্ন হয়নি। আবার চেষ্টা করুন!", "error");
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> ফায়ারবেসে সেভ করুন`;
+        if(!editId) {
+          submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> ফায়ারবেসে সেভ করুন`;
+        } else {
+          submitBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> পরিবর্তন সেভ করুন`;
+        }
       }
     });
 
