@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>উপযোগ - Upajug | আপনার প্রয়োজনে সবসময়!</title>
-  <!-- Google Fonts: Noto Serif Bengali -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -152,13 +151,12 @@
     .theme-purple .badge { background: linear-gradient(45deg, #9333ea, #c084fc); }
     .theme-purple .btn-cart { background: linear-gradient(45deg, #9333ea, #c084fc); color: #fff; }
 
-    .product-img { width: 100%; height: 190px; object-fit: cover; }
+    .product-img { width: 100%; height: 190px; object-fit: cover; background: #080d19; }
     .product-details { padding: 1.2rem; display: flex; flex-direction: column; flex-grow: 1; }
     .badge { align-self: flex-start; padding: 4px 12px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
     .title { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; color: #fff; }
     .desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; flex-grow: 1; line-height: 1.4; }
 
-    /* কার্ডে ভেসে থাকা বেস্ট রিভিউ বক্সের স্টাইল */
     .card-best-review {
       background: rgba(255, 183, 3, 0.07);
       border-left: 3px solid var(--accent-gold);
@@ -179,12 +177,10 @@
     .btn-review { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.12); }
     .btn-review:hover { background: rgba(255,255,255,0.18); }
 
-    /* Modals */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 1rem; }
     .modal-content { background: #111a2e; border-radius: 20px; padding: 1.4rem; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; border: 1px solid rgba(255, 107, 0, 0.3); position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
     .close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); }
 
-    /* Forms & Coupon */
     .form-group { margin-bottom: 0.8rem; }
     .form-group label { display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
     .form-control { width: 100%; padding: 0.65rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: #080d19; color: #fff; outline: none; }
@@ -214,7 +210,6 @@
 </head>
 <body>
 
-  <!-- Slim Navigation Header -->
   <header>
     <div class="brand-container">
       <div class="logo-u-badge">
@@ -259,7 +254,6 @@
       <span class="close-modal" onclick="closeCheckoutModal()">&times;</span>
       <h3 style="margin-bottom: 0.8rem; color: var(--accent-gold);"><i class="fa-solid fa-bag-shopping"></i> অর্ডার ও অগ্রিম পেমেন্ট</h3>
       
-      <!-- ডিসকাউন্ট কুপন বক্স -->
       <div class="coupon-card">
         <label style="font-size: 0.82rem; color: var(--accent-gold); font-weight: bold;"><i class="fa-solid fa-ticket"></i> ডিসকাউন্ট কুপন কোড আছে?</label>
         <div class="coupon-box">
@@ -363,7 +357,6 @@
     </div>
   </div>
 
-  <!-- Footer Section -->
   <footer>
     <div class="footer-content">
       <div class="footer-section">
@@ -391,7 +384,6 @@
     </div>
   </footer>
 
-  <!-- Firebase & App Script Integration -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
@@ -413,31 +405,34 @@
 
     const WHATSAPP_NUMBER = "8801614824987";
 
-    // ফলব্যাক বা ডিফল্ট প্রোডাক্ট তালিকা
-    let products = [
-      { id: "1", title: "Aesthetic Study Desk Setup Kit", price: 850, category: "study", theme: "theme-red", badge: "Best Seller", image: "https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?w=500", desc: "আই-কেয়ার LED ল্যাম্প, এক্রিলিক টু-ডু বোর্ড এবং কলমদানি কম্বো।" }
-    ];
-
+    let products = [];
     let coupons = [];
     let appliedCoupon = null;
-    let reviews = {
-      "1": [{ name: "রাহিম আহমেদ", rating: 5, comment: "খুব চমৎকার একটি কিট! টেবিলের সৌন্দর্য অনেক বাড়িয়ে দিয়েছে।" }]
-    };
+    let reviews = {};
     let cart = {};
     let activeCategory = 'all';
     let currentReviewProductId = null;
 
+    // ড্রাইভ লিংক ইমেজ হ্যান্ডলার
+    function formatImageUrl(url) {
+      if (!url) return '';
+      const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        return `https://lh3.googleusercontent.com/d/${match[1]}`;
+      }
+      return url;
+    }
+
     async function fetchProductsFromFirebase() {
       try {
         const querySnapshot = await getDocs(collection(db, "products"));
-        if (!querySnapshot.empty) {
-          products = [];
-          querySnapshot.forEach((doc) => {
-            products.push({ id: doc.id, ...doc.data() });
-          });
-        }
+        products = [];
+        querySnapshot.forEach((doc) => {
+          let p = doc.data();
+          products.push({ id: doc.id, ...p, image: formatImageUrl(p.image) });
+        });
       } catch (error) {
-        console.error("Error fetching products from Firestore: ", error);
+        console.error("Error fetching products: ", error);
       }
       renderProducts();
     }
@@ -473,12 +468,10 @@
       renderProducts();
     }
 
-    // সর্বোচ্চ রেটিং বা সাম্প্রতিক রিভিউ বের করার হেল্পার ফাংশন
     function getBestReviewHtml(productId) {
       const pReviews = reviews[productId];
       if (!pReviews || pReviews.length === 0) return '';
 
-      // সর্বোচ্চ রেটিং প্রাপ্ত এবং সাম্প্রতিক রিভিউ বাছাই করা
       const sorted = [...pReviews].sort((a, b) => (b.rating || 5) - (a.rating || 5));
       const best = sorted[0];
       const stars = '⭐'.repeat(best.rating || 5);
@@ -518,13 +511,12 @@
 
         grid.innerHTML += `
           <div class="product-card ${p.theme || 'theme-purple'}">
-            <img src="${p.image}" class="product-img" alt="${p.title}">
+            <img src="${p.image}" class="product-img" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?w=500'">
             <div class="product-details">
               <span class="badge">${p.badge || 'New'}</span>
               <div class="title">${p.title}</div>
               <div class="desc">${p.desc}</div>
               
-              <!-- বেস্ট রিভিউ প্রিভিউ প্রদর্শন -->
               ${bestReviewBox}
 
               <div class="price-row">
@@ -680,7 +672,7 @@
         }
         reviews[currentReviewProductId].unshift(reviewData);
         loadReviewsList();
-        renderProducts(); // নতুন রিভিউ যোগ হওয়ার সাথে সাথে প্রোডাক্ট কার্ডেও আপডেট করবে
+        renderProducts();
         
         document.getElementById('revName').value = '';
         document.getElementById('revComment').value = '';
@@ -838,7 +830,6 @@
       updateCartUI();
     }
 
-    // পেজ লোড হওয়ার সাথে সাথে ফায়ারবেস থেকে ডাটা ফেচ করা
     fetchProductsFromFirebase();
     fetchCouponsFromFirebase();
     fetchReviewsFromFirebase();
