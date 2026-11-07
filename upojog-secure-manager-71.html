@@ -105,11 +105,8 @@
         </div>
         <div class="form-group">
           <label>ক্যাটাগরি *</label>
-          <select id="prodCategory" class="form-control" required>
-            <option value="study">স্টাডি কিট (study)</option>
-            <option value="tech">টেক ও গ্যাজেট (tech)</option>
-            <option value="gift">গিফট প্যাক (gift)</option>
-          </select>
+          <input type="text" id="prodCategory" class="form-control" list="categoryList" placeholder="যেমন: study বা আপনার মনমতো ক্যাটাগরি" required>
+          <datalist id="categoryList"></datalist>
         </div>
         <div class="form-group">
           <label>বিবরণ *</label>
@@ -283,18 +280,27 @@
     async function loadAdminProducts() {
       const listContainer = document.getElementById('adminProductList');
       const cpSelect = document.getElementById('cpProductId');
+      const categoryList = document.getElementById('categoryList');
       try {
         const querySnapshot = await getDocs(collection(db, "products"));
         allProducts = [];
         let selectHtml = `<option value="ALL">সকল প্রডাক্টের জন্য প্রযোজ্য</option>`;
+        let categoriesSet = new Set();
 
         querySnapshot.forEach((docSnap) => {
           const p = { id: docSnap.id, ...docSnap.data() };
           allProducts.push(p);
           selectHtml += `<option value="${p.id}">${p.title}</option>`;
+          if(p.category) categoriesSet.add(p.category);
         });
 
         cpSelect.innerHTML = selectHtml;
+
+        let datalistHtml = '';
+        categoriesSet.forEach(cat => {
+          datalistHtml += `<option value="${cat}">`;
+        });
+        if(categoryList) categoryList.innerHTML = datalistHtml;
 
         if(allProducts.length === 0) {
           listContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.88rem;">কোনো প্রোডাক্ট নেই।</p>`;
@@ -402,7 +408,7 @@
       const productData = {
         title: document.getElementById('prodTitle').value.trim(),
         price: Number(document.getElementById('prodPrice').value),
-        category: document.getElementById('prodCategory').value,
+        category: document.getElementById('prodCategory').value.trim(),
         desc: document.getElementById('prodDesc').value.trim(),
         image: formatImageUrl(rawImage),
         badge: document.getElementById('prodBadge').value.trim() || 'New',
