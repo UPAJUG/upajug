@@ -135,7 +135,6 @@
       box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 107, 0, 0.2); 
     }
 
-    /* লাল, নীল ও হলুদ থিম কনফিগারেশন (ডার্ক থিম বেসড) */
     .theme-red { border-color: rgba(239, 68, 68, 0.5); }
     .theme-red .badge { background: linear-gradient(45deg, #dc2626, #f87171); }
     .theme-red .btn-cart { background: linear-gradient(45deg, #dc2626, #f87171); color: #fff; }
@@ -147,6 +146,10 @@
     .theme-yellow { border-color: rgba(234, 179, 8, 0.5); }
     .theme-yellow .badge { background: linear-gradient(45deg, #ca8a04, #facc15); color: #000; }
     .theme-yellow .btn-cart { background: linear-gradient(45deg, #ca8a04, #facc15); color: #000; }
+
+    .theme-purple { border-color: rgba(168, 85, 247, 0.5); }
+    .theme-purple .badge { background: linear-gradient(45deg, #9333ea, #c084fc); }
+    .theme-purple .btn-cart { background: linear-gradient(45deg, #9333ea, #c084fc); color: #fff; }
 
     .product-img { width: 100%; height: 190px; object-fit: cover; }
     .product-details { padding: 1.2rem; display: flex; flex-direction: column; flex-grow: 1; }
@@ -188,7 +191,6 @@
 
     .success-box { text-align: center; padding: 0.8rem; }
     .success-icon { font-size: 3rem; color: var(--accent-green); margin-bottom: 0.8rem; }
-
     .review-item { background: rgba(255, 255, 255, 0.04); padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--accent-gold); }
   </style>
 </head>
@@ -217,7 +219,9 @@
     </div>
   </div>
 
-  <div class="products-grid" id="productGrid"></div>
+  <div class="products-grid" id="productGrid">
+    <p style="text-align: center; color: var(--text-muted); grid-column: 1/-1;">লোড হচ্ছে...</p>
+  </div>
 
   <!-- Cart Footer -->
   <div class="cart-float" id="cartFloat">
@@ -359,75 +363,110 @@
     </div>
   </footer>
 
-  <script>
+  <!-- Firebase & App Script Integration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBIWTUniMXQ1APED_oaPHAPeHklr0NsJqA",
+      authDomain: "upojog-shop.firebaseapp.com",
+      projectId: "upojog-shop",
+      storageBucket: "upojog-shop.firebasestorage.app",
+      messagingSenderId: "614249564429",
+      appId: "1:614249564429:web:55aa28e3a1a948ce254844",
+      measurementId: "G-4MHCK3WP5L"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
     const WHATSAPP_NUMBER = "8801614824987";
 
-    // পণ্য তালিকা (লাল, নীল ও হলুদ থিমযুক্ত)
-    const products = [
-      { id: 1, title: "Aesthetic Study Desk Setup Kit", price: 850, category: "study", theme: "theme-red", badge: "Best Seller", image: "https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?w=500", desc: "আই-কেয়ার LED ল্যাম্প, এক্রিলিক টু-ডু বোর্ড এবং কলমদানি কম্বো।" },
-      { id: 2, title: "Acrylic Dry-Erase Board", price: 350, category: "study", theme: "theme-blue", badge: "Trending", image: "https://images.unsplash.com/photo-1584697964400-2ae6a2f6204c?w=500", desc: "কাঠের স্ট্যান্ড ও মার্কার সহ এস্থেটিক ট্রান্সপারেন্ট বোর্ড।" },
-      { id: 3, title: "Eye-Care Rechargeable Lamp", price: 390, category: "tech", theme: "theme-yellow", badge: "3-Level Light", image: "https://images.unsplash.com/photo-1534073828943-f801091bb18c?w=500", desc: "৩৬০ ডিগ্রি ফ্লেক্সিবল নেক ও চার্জারে চলবে রাতভর।" },
-      { id: 4, title: "Revision Flashcards Set", price: 250, category: "study", theme: "theme-red", badge: "Smart Study", image: "https://images.unsplash.com/photo-1588072432836-e10032774350?w=500", desc: "মেটাল রিং সহ ৩০০ GSM প্রিমিয়াম দ্রুত রিভিশন কার্ড।" },
-      { id: 5, title: "7-in-1 Gadget Cleaning Kit", price: 320, category: "tech", theme: "theme-blue", badge: "Must Have", image: "https://images.unsplash.com/photo-1563770660941-20978e870e26?w=500", desc: "ল্যাপটপ কিবোর্ড, এয়ারবাডস ও ফোন পরিষ্কার রাখার টুলস।" },
-      { id: 6, title: "Minimalist Journal & Pen Combo", price: 450, category: "gift", theme: "theme-yellow", badge: "Gift Special", image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500", desc: "লেদার ফিনিশিং নোটবুক, মেটালিক পেন্সিল ও সুভেনির বক্স।" }
+    // ফলব্যাক বা ডিফল্ট প্রোডাক্ট তালিকা (ডাটাবেজ লোড হওয়ার আগে বা ফেইল করলে দেখানোর জন্য)
+    let products = [
+      { id: 1, title: "Aesthetic Study Desk Setup Kit", price: 850, category: "study", theme: "theme-red", badge: "Best Seller", image: "https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?w=500", desc: "আই-কেয়ার LED ল্যাম্প, এক্রিলিক টু-ডু বোর্ড এবং কলমদানি কম্বো।" }
     ];
 
-    // প্রাথমিক রিভিউ ডেটা স্টোরেজ
     let reviews = {
-      1: [{ name: "রাহিম আহমেদ", rating: 5, comment: "খوب চমৎকার একটি কিট! টেবিলের সৌন্দর্য অনেক বাড়িয়ে দিয়েছে।" }],
-      2: [{ name: "সাদিয়া ইসলাম", rating: 5, comment: "কোয়ালিটি অনেক ভালো, লিখে আবার সহজে মুছে ফেলা যায়।" }],
-      3: [{ name: "তানভীর হাসান", rating: 4, comment: "আলোর ব্রাইটনেস বেশ ভালো।" }],
-      4: [{ name: "নুসরাত জাহান", rating: 5, comment: "পড়া মনে রাখতে সাহায্য করছে।" }],
-      5: [{ name: "ইমরান নাজির", rating: 5, comment: "গ্যাজেট পরিষ্কারের জন্য সেরা।" }],
-      6: [{ name: "ফারিহা তাসনিম", rating: 4, comment: "উপহার দেওয়ার জন্য দারুণ একটি কম্বো।" }]
+      1: [{ name: "রাহিম আহমেদ", rating: 5, comment: "খুব চমৎকার একটি কিট! টেবিলের সৌন্দর্য অনেক বাড়িয়ে দিয়েছে।" }]
     };
 
     let cart = {};
     let activeCategory = 'all';
     let currentReviewProductId = null;
 
-    function renderProducts() {
+    // ফায়ারস্টোর থেকে প্রোডাক্ট ফেচ করা
+    async function fetchProductsFromFirebase() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        if (!querySnapshot.empty) {
+          products = [];
+          querySnapshot.forEach((doc) => {
+            products.push({ id: doc.id, ...doc.data() });
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching products from Firestore: ", error);
+      }
+      renderProducts();
+    }
+
+    window.renderProducts = function() {
       const grid = document.getElementById('productGrid');
       const search = document.getElementById('searchBox').value.toLowerCase();
       grid.innerHTML = '';
 
-      products.filter(p => {
+      const filtered = products.filter(p => {
         const matchesCat = activeCategory === 'all' || p.category === activeCategory;
-        const matchesSearch = p.title.toLowerCase().includes(search);
+        const matchesSearch = p.title && p.title.toLowerCase().includes(search);
         return matchesCat && matchesSearch;
-      }).forEach(p => {
-        const advAmt = Math.round(p.price * 0.30);
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<p style="text-align: center; color: var(--text-muted); grid-column: 1/-1;">কোনো পণ্য পাওয়া যায়নি।</p>`;
+        return;
+      }
+
+      filtered.forEach(p => {
+        const priceNum = Number(p.price) || 0;
+        const advAmt = Math.round(priceNum * 0.30);
         grid.innerHTML += `
-          <div class="product-card ${p.theme}">
+          <div class="product-card ${p.theme || 'theme-purple'}">
             <img src="${p.image}" class="product-img" alt="${p.title}">
             <div class="product-details">
-              <span class="badge">${p.badge}</span>
+              <span class="badge">${p.badge || 'New'}</span>
               <div class="title">${p.title}</div>
               <div class="desc">${p.desc}</div>
               <div class="price-row">
-                <div class="price">৳${p.price}</div>
+                <div class="price">৳${priceNum}</div>
                 <div class="advance-tag">৩০% অগ্রিম: ৳${advAmt}</div>
               </div>
               <div class="card-actions">
-                <button class="btn btn-review" onclick="openReviewModal(${p.id})"><i class="fa-regular fa-star"></i> রিভিউ</button>
-                <button class="btn btn-cart" onclick="addToCart(${p.id})"><i class="fa-solid fa-plus"></i> কার্ট</button>
+                <button class="btn btn-review" onclick="openReviewModal('${p.id}')"><i class="fa-regular fa-star"></i> রিভিউ</button>
+                <button class="btn btn-cart" onclick="addToCart('${p.id}')"><i class="fa-solid fa-plus"></i> কার্ট</button>
               </div>
             </div>
           </div>`;
       });
     }
 
-    function addToCart(id) {
+    window.addToCart = function(id) {
       cart[id] = (cart[id] || 0) + 1;
       updateCartUI();
     }
 
-    function updateCartUI() {
+    window.updateCartUI = function() {
       let count = 0, total = 0;
       for(let id in cart) {
         let p = products.find(x => x.id == id);
-        count += cart[id];
-        total += p.price * cart[id];
+        if(p) {
+          count += cart[id];
+          total += (Number(p.price) || 0) * cart[id];
+        }
       }
       const advance = Math.round(total * 0.30);
       document.getElementById('cartCount').innerText = count;
@@ -435,25 +474,24 @@
       document.getElementById('cartAdvance').innerText = '৳' + advance;
     }
 
-    function filterCat(cat, btn) {
+    window.filterCat = function(cat, btn) {
       activeCategory = cat;
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderProducts();
     }
 
-    function filterProducts() { renderProducts(); }
+    window.filterProducts = function() { renderProducts(); }
 
-    // রিভিউ মোডাল ফাংশনসমূহ
-    function openReviewModal(productId) {
+    window.openReviewModal = function(productId) {
       currentReviewProductId = productId;
-      const product = products.find(p => p.id === productId);
-      document.getElementById('reviewTitle').innerText = `${product.title} - রিভিউ`;
+      const product = products.find(p => p.id == productId);
+      document.getElementById('reviewTitle').innerText = `${product ? product.title : 'প্রোডাক্ট'} - রিভিউ`;
       loadReviewsList();
       document.getElementById('reviewModal').style.display = 'flex';
     }
 
-    function closeReviewModal() {
+    window.closeReviewModal = function() {
       document.getElementById('reviewModal').style.display = 'none';
       document.getElementById('revName').value = '';
       document.getElementById('revComment').value = '';
@@ -484,7 +522,7 @@
       listContainer.innerHTML = html;
     }
 
-    function addReview() {
+    window.addReview = function() {
       const name = document.getElementById('revName').value.trim();
       const rating = parseInt(document.getElementById('revRating').value);
       const comment = document.getElementById('revComment').value.trim();
@@ -505,11 +543,13 @@
       alert("আপনার মূল্যবান রিভিউটি সফলভাবে যোগ হয়েছে!");
     }
 
-    function openCheckoutModal() {
+    window.openCheckoutModal = function() {
       let total = 0;
       for(let id in cart) {
         let p = products.find(x => x.id == id);
-        total += p.price * cart[id];
+        if(p) {
+          total += (Number(p.price) || 0) * cart[id];
+        }
       }
       if(total === 0) return alert("আপনার কার্ট খালি!");
       
@@ -524,9 +564,9 @@
       document.getElementById('checkoutModal').style.display = 'flex';
     }
 
-    function closeCheckoutModal() { document.getElementById('checkoutModal').style.display = 'none'; }
+    window.closeCheckoutModal = function() { document.getElementById('checkoutModal').style.display = 'none'; }
 
-    function copyNumber() {
+    window.copyNumber = function() {
       const numText = document.getElementById('payNum').innerText;
       navigator.clipboard.writeText(numText).then(() => {
         const btn = document.querySelector('.btn-copy');
@@ -541,7 +581,7 @@
       });
     }
 
-    function submitOrderToWhatsApp() {
+    window.submitOrderToWhatsApp = function() {
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
       const address = document.getElementById('custAddress').value.trim();
@@ -558,8 +598,11 @@
 
       for(let id in cart) {
         let p = products.find(x => x.id == id);
-        orderItemsStr += `- ${p.title} x ${cart[id]} (৳${p.price * cart[id]})\n`;
-        totalAmount += p.price * cart[id];
+        if(p) {
+          const pPrice = Number(p.price) || 0;
+          orderItemsStr += `- ${p.title} x ${cart[id]} (৳${pPrice * cart[id]})\n`;
+          totalAmount += pPrice * cart[id];
+        }
       }
 
       const advanceAmt = Math.round(totalAmount * 0.30);
@@ -582,13 +625,14 @@
       document.getElementById('successModal').style.display = 'flex';
     }
 
-    function closeSuccessModal() {
+    window.closeSuccessModal = function() {
       document.getElementById('successModal').style.display = 'none';
       cart = {};
       updateCartUI();
     }
 
-    renderProducts();
+    // পেজ লোড হওয়ার সাথে সাথে ফায়ারবেস থেকে ডাটা ফেচ করা
+    fetchProductsFromFirebase();
   </script>
 </body>
 </html>
