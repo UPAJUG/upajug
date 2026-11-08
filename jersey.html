@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>উপযোগ - Jersey Bulk Pre-Order | আপনার প্রয়োজনে সবসময়!</title>
+  
+  <meta property="og:title" content="উপযোগ - Jersey Bulk Pre-Order">
+  <meta property="og:description" content="কমপক্ষে ১০টি কাস্টমাইজড প্রিমিয়াম জার্সি প্রি-অর্ডার করুন আপনার টিম বা ক্লাবের জন্য!">
+  <meta property="og:image" content="logo.jpg">
+  <meta property="og:url" content="https://upajug.com/jersey">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0b1325 0%, #111a2e 50%, #080d19 100%);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-orange: #ff6b00;
+      --accent-gold: #ffb703;
+      --gradient-orange: linear-gradient(135deg, #ff8c00, #ff4500);
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Serif Bengali', serif; }
+    
+    body { 
+      background: var(--bg-gradient); 
+      background-attachment: fixed;
+      color: var(--text-main); 
+      padding-bottom: 50px;
+      min-height: 100vh;
+    }
+
+    header {
+      background: rgba(13, 22, 41, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 0.6rem 1rem;
+      position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid rgba(255, 107, 0, 0.25);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-wrapper {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1200px; margin: 0 auto; position: relative;
+    }
+
+    .menu-toggle-btn {
+      background: rgba(255, 107, 0, 0.15);
+      border: 1px solid rgba(255, 107, 0, 0.4);
+      color: var(--accent-gold); font-size: 1.2rem;
+      padding: 8px 12px; border-radius: 10px; cursor: pointer; transition: 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .menu-toggle-btn:hover { background: var(--gradient-orange); color: #fff; }
+
+    .brand-container { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 0 auto; }
+    .logo-u-badge {
+      width: 42px; height: 42px; background: var(--gradient-orange); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .u-icon { font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+    .brand-text { display: flex; flex-direction: column; text-align: left; }
+    .logo { 
+      font-size: 1.6rem; font-weight: 800; 
+      background: linear-gradient(135deg, #ffffff, var(--accent-gold)); 
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1;
+    }
+    .tagline { color: var(--accent-orange); font-size: 0.78rem; font-weight: 600; }
+
+    /* Side Nav Drawer */
+    .sidenav-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px);
+      z-index: 1000; display: none; opacity: 0; transition: opacity 0.3s ease;
+    }
+    .sidenav-overlay.active { display: block; opacity: 1; }
+    
+    .sidenav-card {
+      position: fixed; top: 0; left: -320px; width: 300px; height: 100%;
+      background: #0d1629; border-right: 1px solid rgba(255, 107, 0, 0.3);
+      box-shadow: 10px 0 30px rgba(0,0,0,0.7); z-index: 1001; padding: 1.5rem;
+      transition: left 0.3s ease; overflow-y: auto; display: flex; flex-direction: column;
+    }
+    .sidenav-card.active { left: 0; }
+    
+    .sidenav-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 1.2rem;
+    }
+    .sidenav-title { font-size: 1.1rem; color: var(--accent-gold); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .close-sidenav { font-size: 1.4rem; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
+    .close-sidenav:hover { color: var(--accent-red); }
+
+    .features-list { list-style: none; display: flex; flex-direction: column; gap: 0.9rem; }
+    .feature-item {
+      background: rgba(19, 31, 56, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.8rem; border-radius: 12px; display: flex; align-items: flex-start; gap: 12px; transition: 0.3s;
+    }
+    .feature-item:hover { border-color: var(--accent-orange); transform: translateX(5px); }
+    .feature-icon { font-size: 1.2rem; color: var(--accent-gold); background: rgba(255, 107, 0, 0.15); padding: 8px; border-radius: 8px; }
+    .feature-text h5 { color: #fff; font-size: 0.88rem; margin-bottom: 2px; }
+    .feature-text p { color: var(--text-muted); font-size: 0.76rem; line-height: 1.3; }
+
+    /* Container Layout */
+    .container { max-width: 950px; margin: 1.5rem auto; padding: 0 1rem; }
+
+    .hero-card {
+      background: linear-gradient(135deg, rgba(255, 107, 0, 0.2) 0%, rgba(17, 26, 46, 0.95) 100%);
+      border: 1px solid var(--accent-gold); border-radius: 20px; padding: 1.5rem;
+      margin-bottom: 1.5rem; text-align: center; backdrop-filter: blur(12px);
+    }
+    .hero-card h2 { color: #fff; font-size: 1.4rem; font-weight: 800; margin-bottom: 6px; }
+    .hero-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; }
+    .min-badge {
+      display: inline-block; background: rgba(239, 68, 68, 0.2); color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.4); padding: 4px 12px; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 700; margin-top: 8px;
+    }
+
+    /* Demo Jersey Preview Card */
+    .demo-jersey-card {
+      background: rgba(19, 31, 56, 0.55); backdrop-filter: blur(16px);
+      border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 1.2rem; margin-bottom: 1.5rem; text-align: center;
+    }
+    .demo-jersey-card h3 { color: var(--accent-gold); font-size: 1.1rem; margin-bottom: 0.8rem; }
+    .jersey-preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .jersey-img-box { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,107,0,0.3); background: #080d19; }
+    .jersey-img-box img { width: 100%; height: 210px; object-fit: cover; display: block; }
+    .jersey-img-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: #fff; padding: 4px; font-size: 0.75rem; }
+
+    .form-card {
+      background: rgba(19, 31, 56, 0.55); backdrop-filter: blur(16px);
+      border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 1.8rem; box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    .section-title {
+      color: var(--accent-gold); font-size: 1.05rem; margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group.full-width { grid-column: 1 / -1; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+    .form-control { 
+      width: 100%; padding: 0.75rem; border-radius: 10px; 
+      border: 1px solid rgba(255,255,255,0.12); background: #080d19; 
+      color: #fff; outline: none; transition: 0.3s; font-size: 0.9rem;
+    }
+    .form-control:focus { border-color: var(--accent-orange); box-shadow: 0 0 10px rgba(255, 107, 0, 0.3); }
+
+    /* Size Quantity Matrix Grid */
+    .size-qty-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;
+      background: rgba(8, 13, 25, 0.6); padding: 12px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .size-qty-box { text-align: center; }
+    .size-qty-box label { font-size: 0.78rem; color: var(--accent-gold); display: block; margin-bottom: 4px; }
+    .size-qty-box input { text-align: center; padding: 0.5rem; font-weight: bold; }
+
+    .total-qty-counter {
+      background: rgba(255, 107, 0, 0.15); border: 1px solid var(--accent-orange);
+      padding: 10px; border-radius: 10px; margin-top: 10px; text-align: center; font-weight: 700; font-size: 0.95rem;
+    }
+
+    .size-guide-btn { color: var(--accent-gold); font-size: 0.78rem; text-decoration: underline; cursor: pointer; margin-left: 8px; }
+
+    .info-box {
+      background: rgba(255, 107, 0, 0.08); border: 1px dashed var(--accent-orange);
+      padding: 1rem; border-radius: 12px; margin: 1.2rem 0; font-size: 0.83rem;
+    }
+    .info-box p { color: var(--text-main); line-height: 1.5; margin-bottom: 6px; }
+
+    .btn-submit {
+      width: 100%; padding: 0.9rem; border-radius: 12px; border: none;
+      background: var(--gradient-orange); color: #fff; font-weight: 800;
+      font-size: 1rem; cursor: pointer; transition: 0.3s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 4px 20px rgba(255, 107, 0, 0.4);
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(255, 107, 0, 0.6); }
+
+    /* Size Chart Modal */
+    .modal-overlay { 
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); 
+      display: none; justify-content: center; align-items: center; z-index: 1000; padding: 1rem; 
+    }
+    .modal-content { 
+      background: #111a2e; border-radius: 20px; padding: 1.5rem; max-width: 480px; 
+      width: 100%; border: 1px solid rgba(255, 107, 0, 0.3); position: relative; 
+    }
+    .close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); }
+    .size-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+    .size-table th, .size-table td { border: 1px solid rgba(255,255,255,0.1); padding: 8px; text-align: center; }
+    .size-table th { background: rgba(255, 107, 0, 0.2); color: var(--accent-gold); }
+
+    /* Footer - Main Website Layout */
+    footer { background: #060912; border-top: 1px solid rgba(255, 107, 0, 0.2); padding: 2rem 1rem; margin-top: 3rem; color: var(--text-muted); }
+    .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+    .footer-section h4 { color: var(--accent-gold); margin-bottom: 0.8rem; font-size: 1rem; }
+    .footer-section p, .footer-section div { font-size: 0.85rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 8px; }
+    .social-links { display: flex; gap: 0.8rem; margin-top: 0.8rem; }
+    .social-links a { color: var(--accent-gold); font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-wrapper">
+      <button class="menu-toggle-btn" onclick="toggleSideNav()" title="সুবিধাসমূহ">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <div class="brand-container">
+        <div class="logo-u-badge"><span class="u-icon">উ</span></div>
+        <div class="brand-text">
+          <div class="logo">উপযোগ</div>
+          <div class="tagline">আপনার প্রয়োজনে সবসময়!</div>
+        </div>
+      </div>
+      <div style="width: 42px;"></div>
+    </div>
+  </header>
+
+  <!-- Side Navigation Drawer -->
+  <div class="sidenav-overlay" id="sidenavOverlay" onclick="toggleSideNav()"></div>
+  <div class="sidenav-card" id="sideNav">
+    <div class="sidenav-header">
+      <div class="sidenav-title"><i class="fa-solid fa-shirt" style="color: var(--accent-orange);"></i> আমাদের সুবিধাসমূহ</div>
+      <span class="close-sidenav" onclick="toggleSideNav()">&times;</span>
+    </div>
+
+    <ul class="features-list">
+      <li class="feature-item">
+        <div class="feature-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+        <div class="feature-text">
+          <h5>নীলক্ষেত বই প্রি-অর্ডার</h5>
+          <p>আপনার পছন্দের বইয়ের তালিকা দিন, আমরা নীলক্ষেত থেকে সংগ্রহ করে ডেলিভারি দেব।</p>
+        </div>
+      </li>
+      <li class="feature-item">
+        <div class="feature-icon"><i class="fa-solid fa-wallet"></i></div>
+        <div class="feature-text">
+          <h5>৩০% অগ্রিম পেমেন্ট সুবিধা</h5>
+          <p>মাত্র ৩০% অগ্রিমে অর্ডার করুন, বাকি টাকা কুরিয়ারে পণ্য বুঝে পেয়ে পেমেন্ট করুন।</p>
+        </div>
+      </li>
+      <li class="feature-item">
+        <div class="feature-icon"><i class="fa-solid fa-truck-fast"></i></div>
+        <div class="feature-text">
+          <h5>দ্রুত হোম ডেলিভারি</h5>
+          <p>সারাদেশে ২-৪ দিন কর্মদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দেওয়া হয়।</p>
+        </div>
+      </li>
+      <li class="feature-item">
+        <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="feature-text">
+          <h5>১০০% কোয়ালিটি নিশ্চয়তা</h5>
+          <p>স্টুডেন্টদের জন্য সেরা মানের ও বাছাইকৃত প্রয়োজনীয় প্রোডাক্টের নিশ্চয়তা।</p>
+        </div>
+      </li>
+      <li class="feature-item">
+        <div class="feature-icon"><i class="fa-brands fa-whatsapp"></i></div>
+        <div class="feature-text">
+          <h5>সরাসরি হোয়াটসঅ্যাপ সাপোর্ট</h5>
+          <p>যেকোনো জিজ্ঞাসা বা অর্ডারের আপডেটের জন্য হোয়াটসঅ্যাপে সার্বক্ষণিক সহায়তা।</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="container">
+    <div class="hero-card">
+      <h2><i class="fa-solid fa-fire" style="color: var(--accent-orange);"></i> কাস্টম জার্সি ও টি-শার্ট বাল্ক অর্ডার ফর্ম</h2>
+      <p>টিম, ব্যাচ, ক্লাব বা ইভেন্টের জন্য কাস্টমাইজড প্রিমিয়াম জার্সি ও টি-শার্ট অর্ডার করুন।</p>
+      <div class="min-badge"><i class="fa-solid fa-triangle-exclamation"></i> সর্বনিম্ন ১০টি জার্সির অর্ডার বাধ্যতামূলক</div>
+    </div>
+
+    <!-- Demo Jersey Preview -->
+    <div class="demo-jersey-card">
+      <h3><i class="fa-solid fa-shirt"></i> ডেমো প্রিমিয়াম জার্সি নমুনা</h3>
+      <div class="jersey-preview-grid">
+        <div class="jersey-img-box">
+          <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=500" alt="Front View">
+          <div class="jersey-img-label">ফ্রন্ট ভিউ (Front View)</div>
+        </div>
+        <div class="jersey-img-box">
+          <img src="https://images.unsplash.com/photo-1580088044156-3ef15b800160?w=500" alt="Back Print View">
+          <div class="jersey-img-label">ব্যাক কাস্টম নাম-নম্বর প্রিন্ট</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <form id="bulkJerseyForm" onsubmit="handleOrderSubmit(event)">
+        
+        <!-- Section 1: Item Customization -->
+        <div class="section-title">
+          <i class="fa-solid fa-shirt"></i> ১. জার্সির টাইপ ও কাস্টমাইজেশন
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>প্রোডাক্টের বিবরণ / থিম বা ডিজাইনের নাম *</label>
+            <input type="text" id="itemModel" class="form-control" placeholder="যেমন: ব্যাচ ২০২৬ অফিশিয়াল জার্সি / কাস্টম টি-শার্ট" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label>হাতা (Sleeve) *</label>
+            <select id="itemSleeve" class="form-control">
+              <option value="Half Sleeve">হাফ স্লিভ (Half Sleeve)</option>
+              <option value="Full Sleeve">ফুল স্লিভ (Full Sleeve)</option>
+              <option value="Mixed (Half & Full)">মিক্সড (কিছু হাফ ও কিছু ফুল স্লিভ)</option>
+            </select>
+          </div>
+
+          <!-- Size-wise Quantity Matrix -->
+          <div class="form-group full-width">
+            <label>সাইজ অনুযায়ী জার্সির সংখ্যা দিন (কমপক্ষে ১০টি মোট হতে হবে) * <span class="size-guide-btn" onclick="openSizeChartModal()">সাইজ গাইড</span></label>
+            <div class="size-qty-grid">
+              <div class="size-qty-box">
+                <label>S (36")</label>
+                <input type="number" class="form-control size-input" id="sizeS" value="0" min="0" oninput="calculateTotalQty()">
+              </div>
+              <div class="size-qty-box">
+                <label>M (38")</label>
+                <input type="number" class="form-control size-input" id="sizeM" value="0" min="0" oninput="calculateTotalQty()">
+              </div>
+              <div class="size-qty-box">
+                <label>L (40")</label>
+                <input type="number" class="form-control size-input" id="sizeL" value="0" min="0" oninput="calculateTotalQty()">
+              </div>
+              <div class="size-qty-box">
+                <label>XL (42")</label>
+                <input type="number" class="form-control size-input" id="sizeXL" value="0" min="0" oninput="calculateTotalQty()">
+              </div>
+              <div class="size-qty-box">
+                <label>XXL (44")</label>
+                <input type="number" class="form-control size-input" id="sizeXXL" value="0" min="0" oninput="calculateTotalQty()">
+              </div>
+            </div>
+
+            <div class="total-qty-counter" id="totalQtyDisplay">
+              মোট নির্বাচিত জার্সি: <span id="totalQtyVal" style="color: var(--accent-gold);">0</span> টি (কমপক্ষে ১০টি প্রয়োজন)
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>কাস্টম নাম ও নম্বরের তালিকা (Optional)</label>
+            <textarea id="customPrintList" class="form-control" rows="3" placeholder="প্রতিটি জার্সির নাম, নাম্বার ও সাইজ উল্লেখ করুন। যেমন:&#10;1. TONOY - 10 (Size L)&#10;2. ARIF - 07 (Size M)"></textarea>
+          </div>
+        </div>
+
+        <!-- Section 2: Customer Delivery Info -->
+        <div class="section-title" style="margin-top: 1.2rem;">
+          <i class="fa-solid fa-truck-fast"></i> ২. কাস্টমারের তথ্য ও ঠিকানা
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>আপনার নাম *</label>
+            <input type="text" id="custName" class="form-control" placeholder="যেমন: মো: আরিফ" required>
+          </div>
+
+          <div class="form-group">
+            <label>মোবাইল নম্বর *</label>
+            <input type="tel" id="custPhone" class="form-control" placeholder="017xxxxxxxx" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label>কুরিয়ার ডেলিভারি ঠিকানা (জেলা, থানা ও সম্পূর্ণ এলাকা) *</label>
+            <textarea id="custAddress" class="form-control" rows="2" placeholder="যেমন: হাউস ১২, রোড ৫, মিরপুর-১০, ঢাকা।" required></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label>বিশেষ নির্দেশনা (যদি থাকে)</label>
+            <input type="text" id="orderNote" class="form-control" placeholder="যেমন: লোগো কাস্টমাইজেশন বা নির্দিষ্ট ডেডলাইন...">
+          </div>
+        </div>
+
+        <div class="info-box">
+          <p style="color: var(--accent-gold); font-weight: bold;"><i class="fa-solid fa-circle-info"></i> অর্ডার সাবমিটের নিয়মাবলি:</p>
+          <p>অর্ডার সাবমিট করার পর সম্পূর্ণ তালিকাটি হোয়াটসঅ্যাপে চলে যাবে। আমরা তথ্য রিভিউ করে কাপড়ের মান ও কাস্টমাইজেশন অনুযায়ী প্রতিটির রেট ও অগ্রিম পেমেন্টের ডিটেইলস জানিয়ে দেব।</p>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> হোয়াটসঅ্যাপে বাল্ক প্রি-অর্ডার সাবমিট করুন
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Size Chart Modal -->
+  <div class="modal-overlay" id="sizeChartModal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeSizeChartModal()">&times;</span>
+      <h3 style="color: var(--accent-gold); margin-bottom: 0.8rem;"><i class="fa-solid fa-ruler-combined"></i> সাইজ গাইড (Size Chart)</h3>
+      <p style="font-size: 0.82rem; color: var(--text-muted);">ইঞ্চিতে পরিমাপ (Asian Standard Size)</p>
+      
+      <table class="size-table">
+        <thead>
+          <tr>
+            <th>সাইজ (Size)</th>
+            <th>চেস্ট / বুক (Chest)</th>
+            <th>লম্বা (Length)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>S</td><td>36"</td><td>26"</td></tr>
+          <tr><td>M</td><td>38"</td><td>27"</td></tr>
+          <tr><td>L</td><td>40"</td><td>28"</td></tr>
+          <tr><td>XL</td><td>42"</td><td>29"</td></tr>
+          <tr><td>XXL</td><td>44"</td><td>30"</td></tr>
+        </tbody>
+      </table>
+      <button class="btn-submit" style="margin-top: 1rem; padding: 0.6rem;" onclick="closeSizeChartModal()">ঠিক আছে</button>
+    </div>
+  </div>
+
+  <!-- Main Website Exact Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4 style="display:flex; align-items:center; gap:8px;">
+          <div style="width:24px; height:24px; background:var(--accent-orange); color:#fff; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:bold;">উ</div> 
+          উপযোগ (Upajug)
+        </h4>
+        <p>স্টুডেন্ট ও তরুণদের পড়ার টেবিল ও লাইফস্টাইলকে সুন্দর ও অর্থবহ করতে অনন্য ও প্রয়োজনীয় প্রোডাক্টের নির্ভরযোগ্য প্ল্যাটফর্ম।</p>
+      </div>
+      <div class="footer-section">
+        <h4>গুরুত্বপূর্ণ লিংক</h4>
+        <div>
+          <a href="nilkhet.html" style="color: var(--accent-gold); text-decoration: none; transition: 0.2s;" onmouseover="this.style.color='var(--accent-orange)'" onmouseout="this.style.color='var(--accent-gold)'">
+            <i class="fa-solid fa-book-bookmark" style="color:var(--accent-orange);"></i> নীলক্ষেত বই অর্ডার
+          </a>
+        </div>
+        <div style="margin-top: 6px;">
+          <a href="policy.html" style="color: var(--text-muted); text-decoration: none; transition: 0.2s;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)'">
+            <i class="fa-solid fa-file-contract" style="color:var(--accent-orange);"></i> Terms & Policy
+          </a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h4>যোগাযোগ</h4>
+        <div><i class="fa-solid fa-location-dot" style="color:var(--accent-orange);"></i> ঢাকা, বাংলাদেশ</div>
+        <div><i class="fa-solid fa-phone" style="color:var(--accent-orange);"></i> +880 1614-824987</div>
+        <div><i class="fa-solid fa-envelope" style="color:var(--accent-orange);"></i> upajugsupport@gmail.com</div>
+      </div>
+      <div class="footer-section">
+        <h4>সোশ্যাল মিডিয়া</h4>
+        <p>আমাদের সাথে যুক্ত থাকুন:</p>
+        <div class="social-links">
+          <a href="#"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://wa.me/8801614824987" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const WHATSAPP_NUMBER = "8801614824987";
+
+    function toggleSideNav() {
+      const sideNav = document.getElementById('sideNav');
+      const overlay = document.getElementById('sidenavOverlay');
+      sideNav.classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
+
+    function openSizeChartModal() {
+      document.getElementById('sizeChartModal').style.display = 'flex';
+    }
+    
+    function closeSizeChartModal() {
+      document.getElementById('sizeChartModal').style.display = 'none';
+    }
+
+    function calculateTotalQty() {
+      const s = parseInt(document.getElementById('sizeS').value) || 0;
+      const m = parseInt(document.getElementById('sizeM').value) || 0;
+      const l = parseInt(document.getElementById('sizeL').value) || 0;
+      const xl = parseInt(document.getElementById('sizeXL').value) || 0;
+      const xxl = parseInt(document.getElementById('sizeXXL').value) || 0;
+
+      const total = s + m + l + xl + xxl;
+      const display = document.getElementById('totalQtyVal');
+      display.innerText = total;
+
+      if(total >= 10) {
+        display.style.color = '#10b981'; // Green
+      } else {
+        display.style.color = '#ffb703'; // Gold/Yellow
+      }
+
+      return total;
+    }
+
+    function handleOrderSubmit(e) {
+      e.preventDefault();
+
+      const totalQty = calculateTotalQty();
+
+      // Minimum 10 jerseys validation
+      if(totalQty < 10) {
+        alert("⚠️ দুঃখিত! বাল্ক প্রি-অর্ডারের জন্য সর্বনিম্ন ১০টি জার্সি নির্বাচন করা বাধ্যতামূলক। বর্তমানে আপনি " + totalQty + "টি নির্বাচন করেছেন।");
+        return;
+      }
+
+      const model = document.getElementById('itemModel').value.trim();
+      const sleeve = document.getElementById('itemSleeve').value;
+
+      const s = parseInt(document.getElementById('sizeS').value) || 0;
+      const m = parseInt(document.getElementById('sizeM').value) || 0;
+      const l = parseInt(document.getElementById('sizeL').value) || 0;
+      const xl = parseInt(document.getElementById('sizeXL').value) || 0;
+      const xxl = parseInt(document.getElementById('sizeXXL').value) || 0;
+
+      let sizeBreakdown = [];
+      if(s > 0) sizeBreakdown.push(`S: ${s}টি`);
+      if(m > 0) sizeBreakdown.push(`M: ${m}টি`);
+      if(l > 0) sizeBreakdown.push(`L: ${l}টি`);
+      if(xl > 0) sizeBreakdown.push(`XL: ${xl}টি`);
+      if(xxl > 0) sizeBreakdown.push(`XXL: ${xxl}টি`);
+
+      const customPrintList = document.getElementById('customPrintList').value.trim();
+      const custName = document.getElementById('custName').value.trim();
+      const custPhone = document.getElementById('custPhone').value.trim();
+      const custAddress = document.getElementById('custAddress').value.trim();
+      const orderNote = document.getElementById('orderNote').value.trim();
+
+      let msg = `👕 *জার্সি/টি-শার্ট বাল্ক প্রি-অর্ডার (উপযোগ)*\n` +
+                `--------------------------------------\n` +
+                `👤 *নাম:* ${custName}\n` +
+                `📞 *ফোন:* ${custPhone}\n` +
+                `📍 *ঠিকানা:* ${custAddress}\n\n` +
+                `📦 *অর্ডার সামারি:*\n` +
+                `- *ডিজাইন:* ${model}\n` +
+                `- *হাতা:* ${sleeve}\n` +
+                `- *মোট পরিমাণ:* ${totalQty} টি\n` +
+                `- *সাইজ ব্রেকডাউন:* ${sizeBreakdown.join(', ')}\n\n`;
+
+      if(customPrintList) {
+        msg += `✍️ *কাস্টম নাম-নম্বর প্রিন্টিং লিস্ট:*\n${customPrintList}\n\n`;
+      }
+
+      if(orderNote) {
+        msg += `📝 *বিশেষ নোট:* ${orderNote}\n\n`;
+      }
+
+      msg += `--------------------------------------\n` +
+             `দয়া করে অর্ডারের মোট বিল ও অগ্রিম টোকেন মানির বিবরণ নিশ্চিত করুন।`;
+
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+  </script>
+</body>
+</html>
