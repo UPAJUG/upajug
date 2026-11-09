@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>উপযোগ - Upajug | আপনার প্রয়োজনে সবসময়!</title>
   
-  <!-- Social Media Share Meta Tags (logo.jpg যুক্ত করা হয়েছে) -->
+  <!-- Social Media Share Meta Tags -->
   <meta property="og:title" content="উপযোগ - Upajug | আপনার প্রয়োজনে সবসময়!">
   <meta property="og:description" content="স্টুডেন্ট ও তরুণদের পড়ার টেবিল ও লাইফস্টাইলকে সুন্দর ও অর্থবহ করতে অনন্য ও প্রয়োজনীয় প্রোডাক্টের নির্ভরযোগ্য প্ল্যাটফর্ম।">
   <meta property="og:image" content="logo.jpg">
@@ -331,24 +331,34 @@
       box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4); 
     }
 
-    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; padding: 1rem; max-width: 1200px; margin: 0 auto; }
+    /* 2-Column Grid Layout - স্ক্রিনশটের মতো বড় ছবি ও ফিক্সড সাইজ কার্ড */
+    .products-grid { 
+      display: grid; 
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 0.7rem; 
+      padding: 0.6rem; 
+      max-width: 1200px; 
+      margin: 0 auto; 
+    }
     
     .product-card {
-      background: rgba(19, 31, 56, 0.55);
+      background: rgba(19, 31, 56, 0.6);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-radius: 20px; 
+      border-radius: 16px; 
       overflow: hidden; 
       display: flex; 
       flex-direction: column; 
+      height: 100%; /* সব কার্ডের উচ্চতা একদম সমান রাখবে */
       transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); 
       position: relative; 
       border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 15px 0 rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
     }
     .product-card:hover { 
-      transform: translateY(-10px); 
-      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 107, 0, 0.2); 
+      transform: translateY(-4px); 
+      box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 107, 0, 0.2); 
     }
 
     .theme-red { border-color: rgba(239, 68, 68, 0.5); }
@@ -367,31 +377,43 @@
     .theme-purple .badge { background: linear-gradient(45deg, #9333ea, #c084fc); }
     .theme-purple .btn-cart { background: linear-gradient(45deg, #9333ea, #c084fc); color: #fff; }
 
-    .product-img { width: 100%; height: 190px; object-fit: cover; background: #080d19; }
-    .product-details { padding: 1.2rem; display: flex; flex-direction: column; flex-grow: 1; }
-    .badge { align-self: flex-start; padding: 4px 12px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
-    .title { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; color: #fff; }
-    .desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; flex-grow: 1; line-height: 1.4; }
-
-    .card-best-review {
-      background: rgba(255, 183, 3, 0.07);
-      border-left: 3px solid var(--accent-gold);
-      padding: 8px 10px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      font-size: 0.78rem;
+    /* ছবি বড় করার জন্য উচ্চতা ১৮০px করা হয়েছে */
+    .product-img { width: 100%; height: 180px; object-fit: cover; background: #080d19; }
+    .product-details { padding: 0.8rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+    .badge { align-self: flex-start; padding: 2px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    
+    /* টাইটেল সর্বোচ্চ ১ লাইন শো করবে */
+    .title { 
+      font-size: 0.92rem; 
+      font-weight: 700; 
+      margin-bottom: 4px; 
+      color: #fff; 
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .best-rev-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; font-weight: bold; color: var(--accent-gold); }
-    .best-rev-text { color: var(--text-main); font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    /* ডেসক্রিপশন সর্বোচ্চ ২ লাইন শো করবে */
+    .desc { 
+      font-size: 0.78rem; 
+      color: var(--text-muted); 
+      margin-bottom: 8px; 
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      height: 2.7em; /* ফিক্সড হাইট ২টি লাইনের জন্য */
+    }
 
-    .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.9rem; }
-    .price { font-size: 1.35rem; font-weight: 800; color: var(--accent-gold); }
-    .advance-tag { font-size: 0.72rem; color: var(--accent-orange); background: rgba(255, 107, 0, 0.15); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255, 107, 0, 0.3); font-weight: 600; }
+    .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 4px; margin-top: auto; }
+    .price { font-size: 1.15rem; font-weight: 800; color: var(--accent-gold); }
+    .advance-tag { font-size: 0.65rem; color: var(--accent-orange); background: rgba(255, 107, 0, 0.15); padding: 3px 6px; border-radius: 6px; border: 1px solid rgba(255, 107, 0, 0.3); font-weight: 600; }
 
-    .card-actions { display: flex; gap: 0.5rem; }
-    .btn { flex: 1; padding: 0.65rem; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.88rem; }
-    .btn-review { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.12); }
-    .btn-review:hover { background: rgba(255,255,255,0.18); }
+    .card-actions { display: flex; gap: 0.4rem; }
+    .btn { flex: 1; padding: 0.55rem; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 0.8rem; }
 
     /* About Section Styles */
     .about-section {
@@ -433,11 +455,19 @@
         flex-direction: column;
         padding: 1.2rem;
       }
+      .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        padding: 0.5rem;
+      }
+      .product-img {
+        height: 160px; /* মোবাইলেও ছবি বেশ বড় দেখাবে */
+      }
     }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 1rem; }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 1rem; }
     .modal-content { background: #111a2e; border-radius: 20px; padding: 1.4rem; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; border: 1px solid rgba(255, 107, 0, 0.3); position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-    .close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); }
+    .close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); z-index: 10; }
 
     .form-group { margin-bottom: 0.8rem; }
     .form-group label { display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
@@ -501,7 +531,6 @@
     </div>
 
     <ul class="features-list">
-      <!-- নতুন যুক্ত করা কাস্টমাইজড জার্সি প্রি অর্ডার কার্ড (jersey.html লিংকসহ) -->
       <li>
         <a href="jersey.html" class="feature-item">
           <div class="feature-icon"><i class="fa-solid fa-shirt"></i></div>
@@ -574,7 +603,7 @@
     </a>
   </section>
 
-  <!-- About Section (about.jpeg যুক্ত করা হয়েছে) -->
+  <!-- About Section -->
   <section class="about-section">
     <div class="about-card">
       <div class="about-img-box">
@@ -596,6 +625,16 @@
 
   <div class="products-grid" id="productGrid">
     <p style="text-align: center; color: var(--text-muted); grid-column: 1/-1;">লোড হচ্ছে...</p>
+  </div>
+
+  <!-- Product Details Modal (কার্ডে ট্যাব করলে পণ্যের বড় ছবি ও পূর্ণাঙ্গ তথ্যসহ দেখাবে) -->
+  <div class="modal-overlay" id="productDetailsModal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeProductDetailsModal()">&times;</span>
+      <div id="detailsModalBody">
+        <!-- প্রোডাক্টের সম্পূর্ণ ছবি ও ডেসক্রিপশন এখানে লোড হবে -->
+      </div>
+    </div>
   </div>
 
   <!-- Cart Footer -->
@@ -854,25 +893,6 @@
       renderProducts();
     }
 
-    function getBestReviewHtml(productId) {
-      const pReviews = reviews[productId];
-      if (!pReviews || pReviews.length === 0) return '';
-
-      const sorted = [...pReviews].sort((a, b) => (b.rating || 5) - (a.rating || 5));
-      const best = sorted[0];
-      const stars = '⭐'.repeat(best.rating || 5);
-
-      return `
-        <div class="card-best-review">
-          <div class="best-rev-header">
-            <span>👤 ${best.name}</span>
-            <span style="font-size:0.7rem;">${stars}</span>
-          </div>
-          <div class="best-rev-text">"${best.comment}"</div>
-        </div>
-      `;
-    }
-
     window.renderCategories = function() {
       const container = document.querySelector('.categories');
       if (!container) return;
@@ -911,32 +931,89 @@
       filtered.forEach(p => {
         const priceNum = Number(p.price) || 0;
         const advAmt = Math.round(priceNum * 0.30);
-        const bestReviewBox = getBestReviewHtml(p.id);
 
+        // বড় ছবি, সর্বোচ্চ ২ লাইন ডেসক্রিপশন এবং ফিক্সড সাইজ কার্ড
         grid.innerHTML += `
-          <div class="product-card ${p.theme || 'theme-purple'}">
+          <div class="product-card ${p.theme || 'theme-purple'}" onclick="openProductDetailsModal('${p.id}')">
             <img src="${p.image}" class="product-img" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?w=500'">
             <div class="product-details">
-              <div style="display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
-                <span class="badge">${p.badge || 'New'}</span>
-                ${p.category ? `<span class="badge" style="background: rgba(255,255,255,0.08); color: var(--accent-gold); border: 1px solid rgba(255,183,3,0.3);">${p.category}</span>` : ''}
+              <div>
+                <div style="display: flex; gap: 4px; margin-bottom: 4px; flex-wrap: wrap;">
+                  <span class="badge">${p.badge || 'New'}</span>
+                </div>
+                <div class="title" title="${p.title}">${p.title}</div>
+                <div class="desc">${p.desc}</div>
               </div>
-              <div class="title">${p.title}</div>
-              <div class="desc">${p.desc}</div>
-              
-              ${bestReviewBox}
 
-              <div class="price-row">
-                <div class="price">৳${priceNum}</div>
-                <div class="advance-tag">৩০% অগ্রিম: ৳${advAmt}</div>
-              </div>
-              <div class="card-actions">
-                <button class="btn btn-review" onclick="openReviewModal('${p.id}')"><i class="fa-regular fa-star"></i> রিভিউ</button>
-                <button class="btn btn-cart" onclick="addToCart('${p.id}')"><i class="fa-solid fa-plus"></i> কার্ট</button>
+              <div>
+                <div class="price-row">
+                  <div class="price">৳${priceNum}</div>
+                  <div class="advance-tag">৩০% অগ্রিম</div>
+                </div>
+                <div class="card-actions">
+                  <button class="btn btn-cart" onclick="event.stopPropagation(); addToCart('${p.id}')">
+                    <i class="fa-solid fa-plus"></i> কার্ট
+                  </button>
+                </div>
               </div>
             </div>
           </div>`;
       });
+    }
+
+    // কার্ডে ট্যাব/ক্লিক করলে বিস্তারিত দেখানোর জন্য পপআপ ফাংশন
+    window.openProductDetailsModal = function(productId) {
+      const p = products.find(x => x.id === productId);
+      if(!p) return;
+
+      const priceNum = Number(p.price) || 0;
+      const advAmt = Math.round(priceNum * 0.30);
+      const pReviews = reviews[productId] || [];
+      
+      let reviewsHtml = '';
+      if(pReviews.length > 0) {
+        pReviews.forEach(r => {
+          reviewsHtml += `
+            <div class="review-item">
+              <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:0.8rem; color:var(--accent-gold);">
+                <span>👤 ${r.name}</span>
+                <span>${'⭐'.repeat(r.rating || 5)}</span>
+              </div>
+              <p style="font-size:0.78rem; color:var(--text-main); margin-top:2px;">"${r.comment}"</p>
+            </div>`;
+        });
+      } else {
+        reviewsHtml = `<p style="font-size:0.8rem; color:var(--text-muted); italic">এখনো কোনো রিভিউ নেই।</p>`;
+      }
+
+      const bodyContainer = document.getElementById('detailsModalBody');
+      bodyContainer.innerHTML = `
+        <img src="${p.image}" style="width:100%; max-height:260px; object-fit:cover; border-radius:14px; margin-bottom:1rem; border:1px solid rgba(255,107,0,0.3);" onerror="this.src='https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?w=500'">
+        <span class="badge" style="margin-bottom:6px;">${p.badge || 'New'}</span>
+        <h2 style="color:#fff; font-size:1.3rem; margin-bottom:0.4rem;">${p.title}</h2>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem;">
+          <span style="font-size:1.4rem; font-weight:800; color:var(--accent-gold);">৳${priceNum}</span>
+          <span class="advance-tag">৩০% অগ্রিম: ৳${advAmt}</span>
+        </div>
+        <h4 style="color:var(--accent-gold); font-size:0.95rem; margin-bottom:4px;"><i class="fa-solid fa-circle-info"></i> বিবরণ:</h4>
+        <p style="color:var(--text-main); font-size:0.88rem; line-height:1.6; margin-bottom:1.2rem; background:rgba(255,255,255,0.03); padding:10px; border-radius:10px; border-left:3px solid var(--accent-orange);">${p.desc}</p>
+
+        <h4 style="color:var(--accent-gold); font-size:0.95rem; margin-bottom:6px;"><i class="fa-regular fa-star"></i> কাস্টমার রিভিউ:</h4>
+        <div style="max-height:140px; overflow-y:auto; margin-bottom:1.2rem;">
+          ${reviewsHtml}
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-review" style="flex:1;" onclick="openReviewModal('${p.id}')"><i class="fa-regular fa-star"></i> রিভিউ দিন</button>
+          <button class="btn btn-cart" style="flex:1; background:var(--gradient-orange);" onclick="addToCart('${p.id}'); closeProductDetailsModal();"><i class="fa-solid fa-plus"></i> কার্টে যোগ করুন</button>
+        </div>
+      `;
+
+      document.getElementById('productDetailsModal').style.display = 'flex';
+    }
+
+    window.closeProductDetailsModal = function() {
+      document.getElementById('productDetailsModal').style.display = 'none';
     }
 
     window.addToCart = function(id) {
@@ -1016,6 +1093,7 @@
     window.filterProducts = function() { renderProducts(); }
 
     window.openReviewModal = async function(productId) {
+      closeProductDetailsModal();
       currentReviewProductId = productId;
       await fetchReviewsFromFirebase();
       const product = products.find(p => p.id == productId);
