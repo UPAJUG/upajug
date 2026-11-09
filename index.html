@@ -331,7 +331,7 @@
       box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4); 
     }
 
-    /* 2-Column Grid Layout - স্ক্রিনশটের মতো বড় ছবি ও ফিক্সড সাইজ কার্ড */
+    /* 2-Column Grid Layout */
     .products-grid { 
       display: grid; 
       grid-template-columns: repeat(2, 1fr); 
@@ -349,7 +349,7 @@
       overflow: hidden; 
       display: flex; 
       flex-direction: column; 
-      height: 100%; /* সব কার্ডের উচ্চতা একদম সমান রাখবে */
+      height: 100%;
       transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); 
       position: relative; 
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -377,12 +377,10 @@
     .theme-purple .badge { background: linear-gradient(45deg, #9333ea, #c084fc); }
     .theme-purple .btn-cart { background: linear-gradient(45deg, #9333ea, #c084fc); color: #fff; }
 
-    /* ছবি বড় করার জন্য উচ্চতা ১৮০px করা হয়েছে */
     .product-img { width: 100%; height: 180px; object-fit: cover; background: #080d19; }
     .product-details { padding: 0.8rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
     .badge { align-self: flex-start; padding: 2px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
     
-    /* টাইটেল সর্বোচ্চ ১ লাইন শো করবে */
     .title { 
       font-size: 0.92rem; 
       font-weight: 700; 
@@ -394,7 +392,6 @@
       text-overflow: ellipsis;
     }
     
-    /* ডেসক্রিপশন সর্বোচ্চ ২ লাইন শো করবে */
     .desc { 
       font-size: 0.78rem; 
       color: var(--text-muted); 
@@ -405,7 +402,7 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
-      height: 2.7em; /* ফিক্সড হাইট ২টি লাইনের জন্য */
+      height: 2.7em;
     }
 
     .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 4px; margin-top: auto; }
@@ -461,7 +458,7 @@
         padding: 0.5rem;
       }
       .product-img {
-        height: 160px; /* মোবাইলেও ছবি বেশ বড় দেখাবে */
+        height: 160px;
       }
     }
 
@@ -483,6 +480,12 @@
     .btn-copy { background: rgba(255, 107, 0, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 600; }
 
     .cart-float { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(11, 19, 37, 0.85); backdrop-filter: blur(16px); border-top: 1px solid rgba(255, 107, 0, 0.3); padding: 0.7rem 1rem; display: flex; justify-content: space-between; align-items: center; z-index: 99; box-shadow: 0 -4px 20px rgba(0,0,0,0.4); }
+
+    /* কার্ট ড্রয়ার বা ডিটেইলস পপআপ স্টাইল */
+    .cart-item-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 8px 10px; border-radius: 10px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.08); }
+    .qty-control { display: flex; align-items: center; gap: 8px; background: #080d19; padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(255,107,0,0.3); }
+    .qty-btn { background: rgba(255,107,0,0.2); border: none; color: var(--accent-gold); width: 22px; height: 22px; border-radius: 6px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+    .qty-btn:hover { background: var(--accent-orange); color: #fff; }
 
     footer { background: #060912; border-top: 1px solid rgba(255, 107, 0, 0.2); padding: 2rem 1rem; margin-top: 3rem; color: var(--text-muted); }
     .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
@@ -515,7 +518,6 @@
         </div>
       </div>
       
-      <!-- ব্যালেন্স রাখার জন্য একটি খালি স্পেস -->
       <div style="width: 42px;"></div>
     </div>
   </header>
@@ -627,26 +629,38 @@
     <p style="text-align: center; color: var(--text-muted); grid-column: 1/-1;">লোড হচ্ছে...</p>
   </div>
 
-  <!-- Product Details Modal (কার্ডে ট্যাব করলে পণ্যের বড় ছবি ও পূর্ণাঙ্গ তথ্যসহ দেখাবে) -->
+  <!-- Product Details Modal -->
   <div class="modal-overlay" id="productDetailsModal">
     <div class="modal-content">
       <span class="close-modal" onclick="closeProductDetailsModal()">&times;</span>
-      <div id="detailsModalBody">
-        <!-- প্রোডাক্টের সম্পূর্ণ ছবি ও ডেসক্রিপশন এখানে লোড হবে -->
-      </div>
+      <div id="detailsModalBody"></div>
     </div>
   </div>
 
   <!-- Cart Footer -->
   <div class="cart-float" id="cartFloat">
-    <div>
+    <div style="cursor: pointer;" onclick="openCartModal()" title="কার্ট লিস্ট দেখুন">
       <span style="color: var(--text-muted); font-size:0.85rem;">আইটেম: </span><strong id="cartCount">0</strong> | 
       <span style="color: var(--text-muted); font-size:0.85rem;">মোট: </span><strong id="cartTotal" style="color: var(--accent-gold);">৳0</strong>
-      <div style="font-size: 0.72rem; color: var(--accent-orange);">৩০% অগ্রিম: <span id="cartAdvance">৳0</span></div>
+      <div style="font-size: 0.72rem; color: var(--accent-orange);">৩০% অগ্রিম: <span id="cartAdvance">৳0</span> <i class="fa-solid fa-angle-up"></i></div>
     </div>
     <button class="btn btn-cart" style="flex: initial; padding: 0.65rem 1.3rem; background: var(--gradient-orange);" onclick="openCheckoutModal()">
       <i class="fa-solid fa-truck-fast"></i> চেকআউট
     </button>
+  </div>
+
+  <!-- Cart Items Modal (পণ্য যোগ, বিয়োগ বা বাদ দেওয়ার পপআপ উইন্ডো) -->
+  <div class="modal-overlay" id="cartModal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeCartModal()">&times;</span>
+      <h3 style="margin-bottom: 0.8rem; color: var(--accent-gold);"><i class="fa-solid fa-cart-shopping"></i> আপনার কার্ট লিস্ট</h3>
+      <div id="cartItemsList" style="max-height: 250px; overflow-y: auto; margin-bottom: 1rem;">
+        <!-- কার্টের পণ্যগুলো এখানে ডাইনামিক দেখাবে -->
+      </div>
+      <button class="btn btn-cart" style="width: 100%; background: var(--gradient-orange);" onclick="closeCartModal(); openCheckoutModal();">
+        <i class="fa-solid fa-truck-fast"></i> চেকআউটে যান
+      </button>
+    </div>
   </div>
 
   <!-- Checkout Modal -->
@@ -799,7 +813,6 @@
   </footer>
 
   <script>
-    // Side Navigation Toggle Function
     function toggleSideNav() {
       const sideNav = document.getElementById('sideNav');
       const overlay = document.getElementById('sidenavOverlay');
@@ -837,7 +850,6 @@
     let activeCategory = 'all';
     let currentReviewProductId = null;
 
-    // ড্রাইভ লিংক ইমেজ হ্যান্ডলার
     function formatImageUrl(url) {
       if (!url) return '';
       const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
@@ -932,7 +944,6 @@
         const priceNum = Number(p.price) || 0;
         const advAmt = Math.round(priceNum * 0.30);
 
-        // বড় ছবি, সর্বোচ্চ ২ লাইন ডেসক্রিপশন এবং ফিক্সড সাইজ কার্ড
         grid.innerHTML += `
           <div class="product-card ${p.theme || 'theme-purple'}" onclick="openProductDetailsModal('${p.id}')">
             <img src="${p.image}" class="product-img" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?w=500'">
@@ -961,7 +972,6 @@
       });
     }
 
-    // কার্ডে ট্যাব/ক্লিক করলে বিস্তারিত দেখানোর জন্য পপআপ ফাংশন
     window.openProductDetailsModal = function(productId) {
       const p = products.find(x => x.id === productId);
       if(!p) return;
@@ -1019,6 +1029,72 @@
     window.addToCart = function(id) {
       cart[id] = (cart[id] || 0) + 1;
       updateCartUI();
+    }
+
+    // কার্ট থেকে পণ্য কমানোর ফাংশন (-)
+    window.decreaseCart = function(id) {
+      if(cart[id]) {
+        cart[id]--;
+        if(cart[id] <= 0) {
+          delete cart[id];
+        }
+      }
+      updateCartUI();
+      renderCartItemsList();
+    }
+
+    // কার্ট থেকে নির্দিষ্ট পণ্য পুরোপুরি রিমুভ করার ফাংশন
+    window.removeFromCart = function(id) {
+      delete cart[id];
+      updateCartUI();
+      renderCartItemsList();
+    }
+
+    window.openCartModal = function() {
+      renderCartItemsList();
+      document.getElementById('cartModal').style.display = 'flex';
+    }
+
+    window.closeCartModal = function() {
+      document.getElementById('cartModal').style.display = 'none';
+    }
+
+    function renderCartItemsList() {
+      const container = document.getElementById('cartItemsList');
+      let html = '';
+      let hasItems = false;
+
+      for(let id in cart) {
+        let p = products.find(x => x.id == id);
+        if(p && cart[id] > 0) {
+          hasItems = true;
+          let itemTotal = (Number(p.price) || 0) * cart[id];
+          html += `
+            <div class="cart-item-row">
+              <div style="flex:1; padding-right:8px;">
+                <div style="font-size:0.85rem; font-weight:bold; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:160px;">${p.title}</div>
+                <div style="font-size:0.75rem; color:var(--accent-gold);">৳${p.price} x ${cart[id]} = ৳${itemTotal}</div>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div class="qty-control">
+                  <button class="qty-btn" onclick="decreaseCart('${id}')"><i class="fa-solid fa-minus"></i></button>
+                  <span style="font-size:0.85rem; font-weight:bold; min-width:15px; text-align:center;">${cart[id]}</span>
+                  <button class="qty-btn" onclick="addToCart('${id}'); renderCartItemsList();"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <button onclick="removeFromCart('${id}')" style="background:none; border:none; color:var(--accent-red); cursor:pointer; font-size:1rem; padding:4px;" title="বাদ দিন">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      if(!hasItems) {
+        container.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding:1rem;">আপনার কার্ট খালি!</p>`;
+      } else {
+        container.innerHTML = html;
+      }
     }
 
     window.updateCartUI = function() {
