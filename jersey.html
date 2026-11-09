@@ -127,7 +127,7 @@
       font-size: 0.8rem; font-weight: 700; margin-top: 8px;
     }
 
-    /* Demo Jersey Preview Card */
+    /* Jersey Preview Card */
     .demo-jersey-card {
       background: rgba(19, 31, 56, 0.55); backdrop-filter: blur(16px);
       border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.12);
@@ -292,16 +292,16 @@
       <div class="min-badge"><i class="fa-solid fa-triangle-exclamation"></i> সর্বনিম্ন ১০টি জার্সির অর্ডার বাধ্যতামূলক</div>
     </div>
 
-    <!-- Demo Jersey Preview -->
+    <!-- Live Jersey Preview Box -->
     <div class="demo-jersey-card">
-      <h3><i class="fa-solid fa-shirt"></i> ডেমো প্রিমিয়াম জার্সি নমুনা</h3>
+      <h3><i class="fa-solid fa-shirt"></i> লাইভ জার্সি ডিজাইন প্রিভিউ</h3>
       <div class="jersey-preview-grid">
         <div class="jersey-img-box">
-          <img src="https://drive.google.com/file/d/10DxJ6QOjdDuaGfLHjxW1giWFaggcxWX_/view?usp=drivesdk" alt="Front View">
+          <img id="frontPreview" src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=500" alt="Front View" onerror="this.src='https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=500';">
           <div class="jersey-img-label">ফ্রন্ট ভিউ (Front View)</div>
         </div>
         <div class="jersey-img-box">
-          <img src="https://drive.google.com/file/d/1bwHyQkSOyU8rhMobiKBxFCOJC4hU3K6K/view?usp=drivesdk" alt="Back Print View">
+          <img id="backPreview" src="https://images.unsplash.com/photo-1580088044156-3ef15b800160?w=500" alt="Back Print View" onerror="this.src='https://images.unsplash.com/photo-1580088044156-3ef15b800160?w=500';">
           <div class="jersey-img-label">ব্যাক কাস্টম নাম-নম্বর প্রিন্ট</div>
         </div>
       </div>
@@ -319,6 +319,17 @@
           <div class="form-group full-width">
             <label>প্রোডাক্টের বিবরণ / থিম বা ডিজাইনের নাম *</label>
             <input type="text" id="itemModel" class="form-control" placeholder="যেমন: ব্যাচ ২০২৬ অফিশিয়াল জার্সি / কাস্টম টি-শার্ট" required>
+          </div>
+
+          <!-- Image Link Inputs for Google Drive or Direct URLs -->
+          <div class="form-group">
+            <label>ফ্রন্ট সাইড ইমেজ লিঙ্ক / গুগল ড্রাইভ লিঙ্ক (Optional)</label>
+            <input type="text" id="frontImgUrl" class="form-control" placeholder="লিঙ্ক দিন বা ড্রাইভের লিঙ্ক পেস্ট করুন" oninput="updateJerseyPreview()">
+          </div>
+
+          <div class="form-group">
+            <label>ব্যাক সাইড ইমেজ লিঙ্ক / গুগল ড্রাইভ লিঙ্ক (Optional)</label>
+            <input type="text" id="backImgUrl" class="form-control" placeholder="লিঙ্ক দিন বা ড্রাইভের লিঙ্ক পেস্ট করুন" oninput="updateJerseyPreview()">
           </div>
 
           <div class="form-group full-width">
@@ -478,6 +489,9 @@
   <script>
     const WHATSAPP_NUMBER = "8801614824987";
 
+    const defaultFrontImg = "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=500";
+    const defaultBackImg = "https://images.unsplash.com/photo-1580088044156-3ef15b800160?w=500";
+
     function toggleSideNav() {
       const sideNav = document.getElementById('sideNav');
       const overlay = document.getElementById('sidenavOverlay');
@@ -491,6 +505,32 @@
     
     function closeSizeChartModal() {
       document.getElementById('sizeChartModal').style.display = 'none';
+    }
+
+    // Google Drive and Direct Link Converter
+    function formatImageUrl(url) {
+      if(!url) return "";
+      url = url.trim();
+
+      // Convert Google Drive view links to direct view URLs
+      if(url.includes("drive.google.com")) {
+        const matches = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+        if(matches && matches[1]) {
+          return `https://drive.google.com/thumbnail?id=${matches[1]}&sz=w800`;
+        }
+      }
+      return url;
+    }
+
+    function updateJerseyPreview() {
+      const frontInput = document.getElementById('frontImgUrl').value;
+      const backInput = document.getElementById('backImgUrl').value;
+
+      const formattedFront = formatImageUrl(frontInput);
+      const formattedBack = formatImageUrl(backInput);
+
+      document.getElementById('frontPreview').src = formattedFront ? formattedFront : defaultFrontImg;
+      document.getElementById('backPreview').src = formattedBack ? formattedBack : defaultBackImg;
     }
 
     function calculateTotalQty() {
@@ -526,6 +566,8 @@
 
       const model = document.getElementById('itemModel').value.trim();
       const sleeve = document.getElementById('itemSleeve').value;
+      const frontImgUrl = document.getElementById('frontImgUrl').value.trim();
+      const backImgUrl = document.getElementById('backImgUrl').value.trim();
 
       const s = parseInt(document.getElementById('sizeS').value) || 0;
       const m = parseInt(document.getElementById('sizeM').value) || 0;
@@ -556,6 +598,13 @@
                 `- *হাতা:* ${sleeve}\n` +
                 `- *মোট পরিমাণ:* ${totalQty} টি\n` +
                 `- *সাইজ ব্রেকডাউন:* ${sizeBreakdown.join(', ')}\n\n`;
+
+      if(frontImgUrl || backImgUrl) {
+        msg += `🖼️ *ডিজাইন ইমেজ লিঙ্ক:*\n`;
+        if(frontImgUrl) msg += `- ফ্রন্ট লিঙ্ক: ${frontImgUrl}\n`;
+        if(backImgUrl) msg += `- ব্যাক লিঙ্ক: ${backImgUrl}\n`;
+        msg += `\n`;
+      }
 
       if(customPrintList) {
         msg += `✍️ *কাস্টম নাম-নম্বর প্রিন্টিং লিস্ট:*\n${customPrintList}\n\n`;
