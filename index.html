@@ -407,7 +407,7 @@
 
     .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 4px; margin-top: auto; }
     .price { font-size: 1.15rem; font-weight: 800; color: var(--accent-gold); }
-    .advance-tag { font-size: 0.65rem; color: var(--accent-orange); background: rgba(255, 107, 0, 0.15); padding: 3px 6px; border-radius: 6px; border: 1px solid rgba(255, 107, 0, 0.3); font-weight: 600; }
+    .advance-tag { font-size: 0.65rem; color: var(--accent-green); background: rgba(16, 185, 129, 0.15); padding: 3px 6px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 600; }
 
     .card-actions { display: flex; gap: 0.4rem; }
     .btn { flex: 1; padding: 0.55rem; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 0.8rem; }
@@ -475,17 +475,91 @@
     .coupon-box { display: flex; gap: 8px; margin-top: 6px; }
     .btn-coupon { background: var(--accent-gold); color: #000; border: none; padding: 0 1rem; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.82rem; }
 
-    .pay-info { background: rgba(255, 107, 0, 0.08); padding: 0.9rem; border-radius: 12px; border: 1px dashed var(--accent-orange); margin-bottom: 0.9rem; font-size: 0.83rem; }
-    .copy-box { display: flex; align-items: center; justify-content: space-between; background: #080d19; padding: 8px 12px; border-radius: 8px; margin: 6px 0; border: 1px solid rgba(255,183,3,0.3); }
-    .btn-copy { background: rgba(255, 107, 0, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 600; }
+    .pay-info { background: rgba(16, 185, 129, 0.08); padding: 0.9rem; border-radius: 12px; border: 1px dashed var(--accent-green); margin-bottom: 0.9rem; font-size: 0.83rem; }
 
-    .cart-float { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(11, 19, 37, 0.85); backdrop-filter: blur(16px); border-top: 1px solid rgba(255, 107, 0, 0.3); padding: 0.7rem 1rem; display: flex; justify-content: space-between; align-items: center; z-index: 99; box-shadow: 0 -4px 20px rgba(0,0,0,0.4); }
+    /* Fixed Bottom Navigation Bar Styling */
+    .bottom-nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(11, 19, 37, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 107, 0, 0.3);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0.6rem 0.5rem;
+      z-index: 999;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+    }
+    .bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-decoration: none;
+      transition: 0.3s;
+      flex: 1;
+      position: relative;
+    }
+    .bottom-nav-item:hover, .bottom-nav-item.active {
+      color: var(--accent-gold);
+    }
+    .bottom-nav-item i {
+      font-size: 1.3rem;
+      margin-bottom: 2px;
+    }
+    .bottom-nav-item span {
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .nav-cart-badge {
+      position: absolute;
+      top: -2px;
+      right: calc(50% - 16px);
+      background: var(--accent-orange);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: bold;
+      padding: 1px 5px;
+      border-radius: 10px;
+    }
 
     /* কার্ট ড্রয়ার বা ডিটেইলস পপআপ স্টাইল */
     .cart-item-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 8px 10px; border-radius: 10px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.08); }
     .qty-control { display: flex; align-items: center; gap: 8px; background: #080d19; padding: 4px 8px; border-radius: 8px; border: 1px solid rgba(255,107,0,0.3); }
     .qty-btn { background: rgba(255,107,0,0.2); border: none; color: var(--accent-gold); width: 22px; height: 22px; border-radius: 6px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
     .qty-btn:hover { background: var(--accent-orange); color: #fff; }
+
+    /* Category Popup Item List */
+    .category-popup-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .category-popup-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .category-popup-item:hover {
+      background: rgba(255, 107, 0, 0.2);
+      border-color: var(--accent-orange);
+      color: var(--accent-gold);
+    }
 
     footer { background: #060912; border-top: 1px solid rgba(255, 107, 0, 0.2); padding: 2rem 1rem; margin-top: 3rem; color: var(--text-muted); }
     .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
@@ -550,17 +624,10 @@
         </div>
       </li>
       <li class="feature-item">
-        <div class="feature-icon"><i class="fa-solid fa-wallet"></i></div>
-        <div class="feature-text">
-          <h5>৩০% অগ্রিম পেমেন্ট সুবিধা</h5>
-          <p>মাত্র ৩০% অগ্রিমে অর্ডার করুন, বাকি টাকা কুরিয়ারে পণ্য বুঝে পেয়ে পেমেন্ট করুন।</p>
-        </div>
-      </li>
-      <li class="feature-item">
         <div class="feature-icon"><i class="fa-solid fa-truck-fast"></i></div>
         <div class="feature-text">
-          <h5>দ্রুত হোম ডেলিভারি</h5>
-          <p>সারাদেশে ২-৪ দিন কর্মদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দেওয়া হয়।</p>
+          <h5>ক্যাশ অন ডেলিভারি</h5>
+          <p>সম্পূর্ণ ক্যাশ অন ডেলিভারিতে অর্ডার করুন, পণ্য হাতে পেয়ে পেমেন্ট করুন।</p>
         </div>
       </li>
       <li class="feature-item">
@@ -637,16 +704,34 @@
     </div>
   </div>
 
-  <!-- Cart Footer -->
-  <div class="cart-float" id="cartFloat">
-    <div style="cursor: pointer;" onclick="openCartModal()" title="কার্ট লিস্ট দেখুন">
-      <span style="color: var(--text-muted); font-size:0.85rem;">আইটেম: </span><strong id="cartCount">0</strong> | 
-      <span style="color: var(--text-muted); font-size:0.85rem;">মোট: </span><strong id="cartTotal" style="color: var(--accent-gold);">৳0</strong>
-      <div style="font-size: 0.72rem; color: var(--accent-orange);">৩০% অগ্রিম: <span id="cartAdvance">৳0</span> <i class="fa-solid fa-angle-up"></i></div>
+  <!-- Fixed Bottom Navigation Bar -->
+  <div class="bottom-nav-bar">
+    <div class="bottom-nav-item active" onclick="goHome()">
+      <i class="fa-solid fa-house"></i>
+      <span>হোম</span>
     </div>
-    <button class="btn btn-cart" style="flex: initial; padding: 0.65rem 1.3rem; background: var(--gradient-orange);" onclick="openCheckoutModal()">
-      <i class="fa-solid fa-truck-fast"></i> চেকআউট
-    </button>
+    <div class="bottom-nav-item" onclick="openCartModal()">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span>কার্ট</span>
+      <span class="nav-cart-badge" id="navCartCount">0</span>
+    </div>
+    <div class="bottom-nav-item" onclick="openCategoriesModal()">
+      <i class="fa-solid fa-list"></i>
+      <span>ক্যাটাগরি</span>
+    </div>
+  </div>
+
+  <!-- Categories Popup Modal -->
+  <div class="modal-overlay" id="categoriesModal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeCategoriesModal()">&times;</span>
+      <h3 style="margin-bottom: 1rem; color: var(--accent-gold); display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-list"></i> সকল ক্যাটাগরি
+      </h3>
+      <div class="category-popup-list" id="categoryPopupList">
+        <!-- ডাইনামিক ক্যাটাগরি লিস্ট এখানে আসবে -->
+      </div>
+    </div>
   </div>
 
   <!-- Cart Items Modal (পণ্য যোগ, বিয়োগ বা বাদ দেওয়ার পপআপ উইন্ডো) -->
@@ -656,6 +741,10 @@
       <h3 style="margin-bottom: 0.8rem; color: var(--accent-gold);"><i class="fa-solid fa-cart-shopping"></i> আপনার কার্ট লিস্ট</h3>
       <div id="cartItemsList" style="max-height: 250px; overflow-y: auto; margin-bottom: 1rem;">
         <!-- কার্টের পণ্যগুলো এখানে ডাইনামিক দেখাবে -->
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 0.6rem; background: rgba(255,255,255,0.04); border-radius: 8px;">
+        <span style="font-size: 0.9rem; color: var(--text-muted);">মোট বিল:</span>
+        <strong id="cartModalTotal" style="font-size: 1.1rem; color: var(--accent-gold);">৳0</strong>
       </div>
       <button class="btn btn-cart" style="width: 100%; background: var(--gradient-orange);" onclick="closeCartModal(); openCheckoutModal();">
         <i class="fa-solid fa-truck-fast"></i> চেকআউটে যান
@@ -667,7 +756,7 @@
   <div class="modal-overlay" id="checkoutModal">
     <div class="modal-content">
       <span class="close-modal" onclick="closeCheckoutModal()">&times;</span>
-      <h3 style="margin-bottom: 0.8rem; color: var(--accent-gold);"><i class="fa-solid fa-bag-shopping"></i> অর্ডার ও অগ্রিম পেমেন্ট</h3>
+      <h3 style="margin-bottom: 0.8rem; color: var(--accent-gold);"><i class="fa-solid fa-bag-shopping"></i> অর্ডার ও ক্যাশ অন ডেলিভারি</h3>
       
       <div class="coupon-card">
         <label style="font-size: 0.82rem; color: var(--accent-gold); font-weight: bold;"><i class="fa-solid fa-ticket"></i> ডিসকাউন্ট কুপন কোড আছে?</label>
@@ -679,24 +768,9 @@
       </div>
 
       <div class="pay-info">
-        <p style="color: var(--accent-gold); font-weight: bold; margin-bottom: 4px;">📌 ৩০% অগ্রিম পেমেন্ট নির্দেশিকা:</p>
-        <p>মোট বিল <strong>৳<span id="modalTotal">0</span></strong> <span id="discountTag" style="color: var(--accent-green); font-size:0.8rem;"></span> এর মধ্যে অগ্রিম: <strong style="color: var(--accent-orange); font-size: 1.05rem;">৳<span id="modalAdvance">0</span></strong></p>
-        <p style="font-size: 0.78rem; color: var(--text-muted);">বকেয়া (৳<span id="modalCod">0</span>) কুরিয়ার থেকে প্রডাক্ট নেওয়ার সময় দেবেন।</p>
-        
-        <hr style="margin: 6px 0; border-color: rgba(255,255,255,0.1);">
-        
-        <p style="font-size: 0.8rem; color: var(--text-main); font-weight: 600;">পেমেন্ট পাঠানোর পদ্ধতি (Send Money):</p>
-        
-        <div class="copy-box">
-          <span><strong>bKash / Nagad:</strong> <span id="payNum" style="color:var(--accent-gold); font-weight:bold;">01614824987</span></span>
-          <button class="btn-copy" onclick="copyNumber()"><i class="fa-regular fa-copy"></i> কপি করুন</button>
-        </div>
-
-        <ol style="font-size: 0.75rem; color: var(--text-muted); padding-left: 1.1rem; margin-top: 4px;">
-          <li>bKash বা Nagad অ্যাপে গিয়ে <strong>Send Money</strong> সিলেক্ট করুন।</li>
-          <li>উপরের নম্বরে <strong>৳<span id="guideAdvance">0</span></strong> সেন্ড মানি করুন।</li>
-          <li>পেমেন্ট শেষে নিচের ফর্মে তথ্য দিয়ে হোয়াটসঅ্যাপে সাবমিট করুন।</li>
-        </ol>
+        <p style="color: var(--accent-green); font-weight: bold; margin-bottom: 4px;"><i class="fa-solid fa-circle-check"></i> ক্যাশ অন ডেলিভারি (Cash on Delivery)</p>
+        <p style="font-size: 0.82rem; color: var(--text-main);">মোট বিল: <strong style="color: var(--accent-gold); font-size: 1.05rem;">৳<span id="modalTotal">0</span></strong> <span id="discountTag" style="color: var(--accent-green); font-size:0.8rem;"></span></p>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">পণ্য হাতে পেয়ে কুরিয়ার ডেলিভারিম্যানকে সম্পূর্ণ টাকা পরিশোধ করবেন।</p>
       </div>
 
       <div class="form-group">
@@ -710,21 +784,6 @@
       <div class="form-group">
         <label>কুরিয়ার ডেলিভারি ঠিকানা (জেলা, থানা ও সম্পূর্ণ এলাকা) *</label>
         <textarea id="custAddress" class="form-control" rows="2" placeholder="যেমন: হাউস ১২, রোড ৫, মিরপুর-১০, ঢাকা।"></textarea>
-      </div>
-      <div class="form-group">
-        <label>পেমেন্ট মাধ্যম *</label>
-        <select id="payMethod" class="form-control">
-          <option value="bKash">bKash (বিকাশ)</option>
-          <option value="Nagad">Nagad (নগদ)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>যে নম্বর থেকে অগ্রিম পেমেন্ট করেছেন *</label>
-        <input type="text" id="paySender" class="form-control" placeholder="018xxxxxxxx">
-      </div>
-      <div class="form-group">
-        <label>Transaction ID (TrxID) - ঐচ্ছিক</label>
-        <input type="text" id="payTxn" class="form-control" placeholder="যেমন: 9J38KSKS">
       </div>
 
       <button class="btn btn-cart" id="btnSubmitOrder" style="width: 100%; margin-top: 0.8rem; background: var(--gradient-orange);" onclick="submitOrderToWhatsApp()">
@@ -745,7 +804,7 @@
         <div style="background: rgba(255,255,255,0.04); padding: 10px; border-radius: 8px; text-align: left; font-size: 0.8rem; margin-bottom: 0.9rem; border-left: 3px solid var(--accent-gold);">
           <p style="margin-bottom: 4px; font-weight:600;">⏳ ডেলিভারি সংক্রান্ত তথ্য:</p>
           <p style="color: var(--text-muted); line-height: 1.4;">
-            প্রোডাক্ট কোয়ালিটি চেকিং ও কুরিয়ার হস্তান্তরের জন্য ২-৪ দিন সময় লাগতে পারে। যেকোনো তথ্যের জন্য হোয়াটসঅ্যাপেই যোগাযোগ করতে পারবেন।
+            প্রোডাক্ট কোয়ালিটি চেকিং ও কুরিয়ার হস্তান্তরের জন্য ২-৪ দিন সময় লাগতে পারে। ক্যাশ অন ডেলিভারিতে পণ্য বুঝে পেমেন্ট করবেন।
           </p>
         </div>
         <button class="btn btn-cart" style="width: 100%; background: var(--gradient-orange);" onclick="closeSuccessModal()">ঠিক আছে</button>
@@ -819,6 +878,59 @@
       sideNav.classList.toggle('active');
       overlay.classList.toggle('active');
     }
+
+    function goHome() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if(typeof filterCat === 'function') {
+        const allBtn = document.querySelector('.cat-btn');
+        if(allBtn) filterCat('all', allBtn);
+      }
+      const searchBox = document.getElementById('searchBox');
+      if(searchBox) {
+        searchBox.value = '';
+        if(typeof filterProducts === 'function') filterProducts();
+      }
+    }
+
+    function openCategoriesModal() {
+      const container = document.getElementById('categoryPopupList');
+      if (!container) return;
+
+      let categoriesSet = new Set();
+      if(typeof products !== 'undefined') {
+        products.forEach(p => {
+          if (p.category) categoriesSet.add(p.category);
+        });
+      }
+
+      let html = `<div class="category-popup-item" onclick="selectPopupCat('all')"><span>সকল পণ্য</span> <i class="fa-solid fa-chevron-right" style="font-size:0.8rem; color:var(--accent-gold);"></i></div>`;
+      categoriesSet.forEach(cat => {
+        html += `<div class="category-popup-item" onclick="selectPopupCat('${cat}')"><span>${cat}</span> <i class="fa-solid fa-chevron-right" style="font-size:0.8rem; color:var(--accent-gold);"></i></div>`;
+      });
+
+      container.innerHTML = html;
+      document.getElementById('categoriesModal').style.display = 'flex';
+    }
+
+    function closeCategoriesModal() {
+      document.getElementById('categoriesModal').style.display = 'none';
+    }
+
+    function selectPopupCat(cat) {
+      closeCategoriesModal();
+      window.scrollTo({ top: 300, behavior: 'smooth' });
+      if(cat === 'all') {
+        const allBtn = document.querySelector('.cat-btn');
+        if(allBtn) filterCat('all', allBtn);
+      } else {
+        const buttons = document.querySelectorAll('.cat-btn');
+        buttons.forEach(btn => {
+          if(btn.innerText.trim() === cat) {
+            btn.click();
+          }
+        });
+      }
+    }
   </script>
 
   <script type="module">
@@ -842,7 +954,7 @@
 
     const WHATSAPP_NUMBER = "8801614824987";
 
-    let products = [];
+    window.products = [];
     let coupons = [];
     let appliedCoupon = null;
     let reviews = {};
@@ -862,10 +974,10 @@
     async function fetchProductsFromFirebase() {
       try {
         const querySnapshot = await getDocs(collection(db, "products"));
-        products = [];
+        window.products = [];
         querySnapshot.forEach((doc) => {
           let p = doc.data();
-          products.push({ id: doc.id, ...p, image: formatImageUrl(p.image) });
+          window.products.push({ id: doc.id, ...p, image: formatImageUrl(p.image) });
         });
       } catch (error) {
         console.error("Error fetching products: ", error);
@@ -910,7 +1022,7 @@
       if (!container) return;
 
       let categoriesSet = new Set();
-      products.forEach(p => {
+      window.products.forEach(p => {
         if (p.category) categoriesSet.add(p.category);
       });
 
@@ -929,7 +1041,7 @@
       const search = searchBox ? searchBox.value.toLowerCase() : '';
       grid.innerHTML = '';
 
-      const filtered = products.filter(p => {
+      const filtered = window.products.filter(p => {
         const matchesCat = activeCategory === 'all' || p.category === activeCategory;
         const matchesSearch = p.title && p.title.toLowerCase().includes(search);
         return matchesCat && matchesSearch;
@@ -942,7 +1054,6 @@
 
       filtered.forEach(p => {
         const priceNum = Number(p.price) || 0;
-        const advAmt = Math.round(priceNum * 0.30);
 
         grid.innerHTML += `
           <div class="product-card ${p.theme || 'theme-purple'}" onclick="openProductDetailsModal('${p.id}')">
@@ -959,7 +1070,7 @@
               <div>
                 <div class="price-row">
                   <div class="price">৳${priceNum}</div>
-                  <div class="advance-tag">৩০% অগ্রিম</div>
+                  <div class="advance-tag">ক্যাশ অন ডেলিভারি</div>
                 </div>
                 <div class="card-actions">
                   <button class="btn btn-cart" onclick="event.stopPropagation(); addToCart('${p.id}')">
@@ -973,11 +1084,10 @@
     }
 
     window.openProductDetailsModal = function(productId) {
-      const p = products.find(x => x.id === productId);
+      const p = window.products.find(x => x.id === productId);
       if(!p) return;
 
       const priceNum = Number(p.price) || 0;
-      const advAmt = Math.round(priceNum * 0.30);
       const pReviews = reviews[productId] || [];
       
       let reviewsHtml = '';
@@ -1001,9 +1111,9 @@
         <img src="${p.image}" style="width:100%; max-height:260px; object-fit:cover; border-radius:14px; margin-bottom:1rem; border:1px solid rgba(255,107,0,0.3);" onerror="this.src='https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?w=500'">
         <span class="badge" style="margin-bottom:6px;">${p.badge || 'New'}</span>
         <h2 style="color:#fff; font-size:1.3rem; margin-bottom:0.4rem;">${p.title}</h2>
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
           <span style="font-size:1.4rem; font-weight:800; color:var(--accent-gold);">৳${priceNum}</span>
-          <span class="advance-tag">৩০% অগ্রিম: ৳${advAmt}</span>
+          <span class="advance-tag">ক্যাশ অন ডেলিভারি</span>
         </div>
         <h4 style="color:var(--accent-gold); font-size:0.95rem; margin-bottom:4px;"><i class="fa-solid fa-circle-info"></i> বিবরণ:</h4>
         <p style="color:var(--text-main); font-size:0.88rem; line-height:1.6; margin-bottom:1.2rem; background:rgba(255,255,255,0.03); padding:10px; border-radius:10px; border-left:3px solid var(--accent-orange);">${p.desc}</p>
@@ -1063,12 +1173,14 @@
       const container = document.getElementById('cartItemsList');
       let html = '';
       let hasItems = false;
+      let subtotal = 0;
 
       for(let id in cart) {
-        let p = products.find(x => x.id == id);
+        let p = window.products.find(x => x.id == id);
         if(p && cart[id] > 0) {
           hasItems = true;
           let itemTotal = (Number(p.price) || 0) * cart[id];
+          subtotal += itemTotal;
           html += `
             <div class="cart-item-row">
               <div style="flex:1; padding-right:8px;">
@@ -1095,12 +1207,17 @@
       } else {
         container.innerHTML = html;
       }
+
+      let discountAmt = calculateDiscount(subtotal);
+      let total = subtotal - discountAmt;
+      const cartModalTotal = document.getElementById('cartModalTotal');
+      if(cartModalTotal) cartModalTotal.innerText = '৳' + total;
     }
 
     window.updateCartUI = function() {
       let count = 0, subtotal = 0;
       for(let id in cart) {
-        let p = products.find(x => x.id == id);
+        let p = window.products.find(x => x.id == id);
         if(p) {
           count += cart[id];
           subtotal += (Number(p.price) || 0) * cart[id];
@@ -1109,11 +1226,9 @@
 
       let discountAmt = calculateDiscount(subtotal);
       let total = subtotal - discountAmt;
-      let advance = Math.round(total * 0.30);
 
-      document.getElementById('cartCount').innerText = count;
-      document.getElementById('cartTotal').innerText = '৳' + total;
-      document.getElementById('cartAdvance').innerText = '৳' + advance;
+      const navCartCount = document.getElementById('navCartCount');
+      if(navCartCount) navCartCount.innerText = count;
     }
 
     function calculateDiscount(subtotal) {
@@ -1122,7 +1237,7 @@
         return (subtotal * appliedCoupon.percent) / 100;
       } else {
         let targetItemQty = cart[appliedCoupon.productId] || 0;
-        let targetProduct = products.find(x => x.id === appliedCoupon.productId);
+        let targetProduct = window.products.find(x => x.id === appliedCoupon.productId);
         if(targetProduct && targetItemQty > 0) {
           let targetTotal = targetProduct.price * targetItemQty;
           return (targetTotal * appliedCoupon.percent) / 100;
@@ -1162,7 +1277,7 @@
     window.filterCat = function(cat, btn) {
       activeCategory = cat;
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      if(btn) btn.classList.add('active');
       renderProducts();
     }
 
@@ -1172,7 +1287,7 @@
       closeProductDetailsModal();
       currentReviewProductId = productId;
       await fetchReviewsFromFirebase();
-      const product = products.find(p => p.id == productId);
+      const product = window.products.find(p => p.id == productId);
       document.getElementById('reviewTitle').innerText = `${product ? product.title : 'প্রোডাক্ট'} - রিভিউ`;
       loadReviewsList();
       document.getElementById('reviewModal').style.display = 'flex';
@@ -1247,7 +1362,7 @@
     function updateModalTotals() {
       let subtotal = 0;
       for(let id in cart) {
-        let p = products.find(x => x.id == id);
+        let p = window.products.find(x => x.id == id);
         if(p) {
           subtotal += (Number(p.price) || 0) * cart[id];
         }
@@ -1256,14 +1371,9 @@
 
       const discountAmt = calculateDiscount(subtotal);
       const total = subtotal - discountAmt;
-      const advance = Math.round(total * 0.30);
-      const cod = total - advance;
 
       document.getElementById('modalTotal').innerText = total;
       document.getElementById('discountTag').innerText = discountAmt > 0 ? `(-৳${discountAmt} ছাড়)` : '';
-      document.getElementById('modalAdvance').innerText = advance;
-      document.getElementById('guideAdvance').innerText = advance;
-      document.getElementById('modalCod').innerText = cod;
     }
 
     window.openCheckoutModal = function() {
@@ -1277,30 +1387,12 @@
 
     window.closeCheckoutModal = function() { document.getElementById('checkoutModal').style.display = 'none'; }
 
-    window.copyNumber = function() {
-      const numText = document.getElementById('payNum').innerText;
-      navigator.clipboard.writeText(numText).then(() => {
-        const btn = document.querySelector('.btn-copy');
-        btn.innerHTML = '<i class="fa-solid fa-check"></i> কপি হয়েছে!';
-        btn.style.background = '#10b981';
-        btn.style.color = '#fff';
-        setTimeout(() => {
-          btn.innerHTML = '<i class="fa-regular fa-copy"></i> কপি করুন';
-          btn.style.background = 'rgba(255, 107, 0, 0.2)';
-          btn.style.color = 'var(--accent-gold)';
-        }, 2000);
-      });
-    }
-
     window.submitOrderToWhatsApp = async function() {
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
       const address = document.getElementById('custAddress').value.trim();
-      const payMethod = document.getElementById('payMethod').value;
-      const paySender = document.getElementById('paySender').value.trim();
-      const payTxn = document.getElementById('payTxn').value.trim();
 
-      if(!name || !phone || !address || !paySender) {
+      if(!name || !phone || !address) {
         return alert("অনুগ্রহ করে আপনার তথ্যগুলো সঠিকভাবে পূরণ করুন!");
       }
 
@@ -1313,7 +1405,7 @@
       let purchasedItems = [];
 
       for(let id in cart) {
-        let p = products.find(x => x.id == id);
+        let p = window.products.find(x => x.id == id);
         if(p) {
           const pPrice = Number(p.price) || 0;
           const itemTotal = pPrice * cart[id];
@@ -1330,23 +1422,17 @@
 
       const discountAmt = calculateDiscount(subtotalAmount);
       const totalAmount = subtotalAmount - discountAmt;
-      const advanceAmt = Math.round(totalAmount * 0.30);
-      const codAmt = totalAmount - advanceAmt;
 
       const orderData = {
         customerName: name,
         customerPhone: phone,
         customerAddress: address,
-        paymentMethod: payMethod,
-        paymentSender: paySender,
-        transactionId: payTxn || 'N/A',
+        paymentMethod: "Cash on Delivery",
         items: purchasedItems,
         subtotal: subtotalAmount,
         discountAmount: discountAmt,
         appliedCoupon: appliedCoupon ? appliedCoupon.code : 'None',
         totalAmount: totalAmount,
-        advancePaid: advanceAmt,
-        dueAmount: codAmt,
         orderDate: new Date().toISOString(),
         status: "Pending"
       };
@@ -1357,7 +1443,7 @@
         console.error("Error saving order to Firestore:", error);
       }
 
-      let msg = `🛒 *নতুন অর্ডার - উপযোগ (Upajug)*\n` +
+      let msg = `🛒 *নতুন অর্ডার (ক্যাশ অন ডেলিভারি) - উপযোগ (Upajug)*\n` +
                   `--------------------------------------\n` +
                   `👤 *নাম:* ${name}\n` +
                   `📞 *ফোন:* ${phone}\n` +
@@ -1368,9 +1454,7 @@
         msg += `💸 *ছাড় (Coupon: ${appliedCoupon.code}):* -৳${discountAmt}\n`;
       }
 
-      msg += `💰 *মোট মূল্য:* ৳${totalAmount}\n` +
-             `💳 *৩০% অগ্রিম (${payMethod}):* ৳${advanceAmt} (Sender: ${paySender} | TrxID: ${payTxn || 'N/A'})\n` +
-             `💵 *বকেয়া (COD):* ৳${codAmt}\n` +
+      msg += `💰 *মোট মূল্য (COD):* ৳${totalAmount}\n` +
              `--------------------------------------`;
 
       submitBtn.disabled = false;
